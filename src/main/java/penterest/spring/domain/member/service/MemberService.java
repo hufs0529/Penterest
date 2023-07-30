@@ -1,27 +1,18 @@
 package penterest.spring.domain.member.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import penterest.spring.domain.member.dto.MemberResponseDto;
-import penterest.spring.domain.member.repository.MemberRepository;
+import penterest.spring.domain.member.dto.MemberInfoDto;
+import penterest.spring.domain.member.dto.MemberSignUpDto;
 
-@Service
-@RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class MemberService {
-    private final MemberRepository memberRepository;
+public interface MemberService {
 
-    public MemberResponseDto findMemberInfoById(Long memberId) {
-        return memberRepository.findById(memberId)
-                .map(MemberResponseDto::of)
-                .orElseThrow(()-> new RuntimeException("로그인 유저 정보 없음"));
-    }
+    void signUp(MemberSignUpDto memberSignUpDto) throws Exception;
 
-    public MemberResponseDto findMemberInfoByEmail(String email) {
-        return memberRepository.findByEmail(email)
-                .map(MemberResponseDto::of)
-                .orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
-    }
 
+    void updatePassword(String asIsPassword, String toBePassword, String username) throws Exception;
+
+    void withdraw(String checkPassword, String username) throws Exception;
+
+    MemberInfoDto getInfo(Long id) throws Exception;
+
+    MemberInfoDto getMyInfo() throws Exception;
 }

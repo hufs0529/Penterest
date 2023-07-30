@@ -1,10 +1,8 @@
 package penterest.spring.domain.gif.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import penterest.spring.domain.comment.entity.Comment;
+import penterest.spring.domain.member.entity.Authority;
 import penterest.spring.domain.member.entity.Member;
 import penterest.spring.global.domain.BaseTimeEntity;
 
@@ -24,7 +22,7 @@ public class Gif extends BaseTimeEntity {
     @Column(name = "gif_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "writer_id")
     private Member writer;
 
@@ -37,6 +35,14 @@ public class Gif extends BaseTimeEntity {
     @OneToMany(mappedBy = "gif", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
+    @Builder
+    public Gif(String caption, String url) {
+        this.caption = caption;
+        this.url = url;
+
+        this.writer = new Member("null@example.com", "null11223344!", Authority.NORMAL);
+    }
+
     public void addComment(Comment comment) {
         // gif의 writer설정은 gif에서 함
         commentList.add(comment);
@@ -44,8 +50,8 @@ public class Gif extends BaseTimeEntity {
 
     public void confirmWriter(Member writer) {
         this.writer = writer;
-        writer.addGif(this);
     }
+
 
 
 

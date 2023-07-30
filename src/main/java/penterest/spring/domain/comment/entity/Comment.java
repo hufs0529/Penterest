@@ -1,19 +1,18 @@
 package penterest.spring.domain.comment.entity;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.domain.member.entity.Member;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Table(name = "comment")
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Comment extends Serializers.Base {
@@ -79,4 +78,34 @@ public class Comment extends Serializers.Base {
     }
 
 
+    public List<Comment> findRemovableList() {
+
+        List<Comment> result = new ArrayList<>();
+
+        Optional.ofNullable(this.parent).ifPresentOrElse(
+
+                parentComment -> {
+                    if(parentComment.isRemoved() && parentComment.isAllChildRemoved()) {
+                        result.addAll((parentComment.getChildList()));
+                        result.add(parentComment);
+                    }
+                },
+
+                () -> {
+                    if (isAllChildRemoved()) {
+                        result.add(this);
+                        result.addAll(this.getChildList());
+                    }
+                }
+        );
+        return result;
+    }
+
+    private boolean isAllChildRemoved() {
+
+        return getChildList().stream()
+                .map(Comment::isRemoved)
+                .findAny()
+                .orElse(true);
+    }
 }

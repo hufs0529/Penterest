@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import penterest.spring.domain.member.entity.Member;
 import penterest.spring.domain.member.repository.MemberRepository;
+import penterest.spring.global.security.util.CustomUserDetails;
 
 import java.util.Collections;
 
@@ -24,19 +25,16 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Transactional
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return memberRepository.findByEmail(username)
-                .map(this::createUserDetails)
-                .orElseThrow(()-> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
-    }
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Member member = memberRepository.findByEmail(email);
+                //.orElseThrow(() -> new UsernameNotFoundException(email + " -> 데이터베이스에서 찾을 수 없습니다."));
 
-    private UserDetails createUserDetails(Member member) {
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getAuthority().toString());
-
-        return new User(
-                String.valueOf(member.getId()),
+        return new CustomUserDetails(
+                member.getEmail(),
                 member.getPassword(),
-                Collections.singleton(grantedAuthority)
+                Collections.emptyList(), // Assuming you don't have roles/authorities, use an empty list here
+                member.getEmail()
         );
     }
+
 }

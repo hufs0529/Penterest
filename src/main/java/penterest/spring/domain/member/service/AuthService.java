@@ -7,14 +7,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import penterest.spring.domain.member.dto.MemberRequestDto;
-import penterest.spring.domain.member.dto.MemberResponseDto;
-import penterest.spring.domain.member.dto.TokenRequestDto;
+import penterest.spring.domain.member.dto.*;
 import penterest.spring.domain.member.entity.Member;
 import penterest.spring.domain.member.entity.RefreshToken;
 import penterest.spring.domain.member.repository.MemberRepository;
 import penterest.spring.domain.member.repository.RefreshTokenRepository;
-import penterest.spring.domain.member.dto.TokenDto;
 import penterest.spring.global.jwt.TokenProvider;
 
 
@@ -23,23 +20,21 @@ import penterest.spring.global.jwt.TokenProvider;
 public class AuthService {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    @Transactional
-    public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
-        if (memberRepository.existsByEmail(memberRequestDto.getEmail())){
-            throw new RuntimeException("이미 가입된 유저입니다");
-        }
-        Member member = memberRequestDto.toMember(passwordEncoder);
-        return MemberResponseDto.of(memberRepository.save(member));
-    }
+//    @Transactional
+//    public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
+//        if (memberRepository.existsByEmail(memberRequestDto.getEmail())){
+//            throw new RuntimeException("이미 가입된 유저입니다");
+//        }
+//        Member member = memberRequestDto.toMember(passwordEncoder);
+//        return MemberResponseDto.of(memberRepository.save(member));
+//    }
 
     @Transactional
-    public  TokenDto login(MemberRequestDto memberRequestDto) {
-        UsernamePasswordAuthenticationToken authenticationToken = memberRequestDto.toAuthentication();
+    public TokenDto login(MemberSignUpDto memberSignUpDto) {
+        UsernamePasswordAuthenticationToken authenticationToken = memberSignUpDto.toAuthentication();
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
@@ -51,7 +46,7 @@ public class AuthService {
                 .build();
 
         refreshTokenRepository.save(refreshToken);
-        //System.out.println(tokenDto);
+
         return tokenDto;
     }
 

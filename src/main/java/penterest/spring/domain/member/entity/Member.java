@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import penterest.spring.domain.comment.entity.Comment;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.global.domain.BaseTimeEntity;
@@ -35,7 +36,7 @@ public class Member extends BaseTimeEntity {
     public Member(String email, String password, Authority authority) {
         this.email = email;
         this.password = password;
-        this.authority = authority;
+        this.authority = Authority.NORMAL;
     }
 
     @OneToMany(mappedBy = "writer") //== 회원탈퇴 -> 작성한 게시물, 댓글 모두 삭제 ==//cascade = ALL, orphanRemoval = true
@@ -52,4 +53,22 @@ public class Member extends BaseTimeEntity {
     public void addComment(Comment comment) {
         commentList.add(comment);
     }
+
+    public void addUserAuthority() {
+        this.authority = Authority.NORMAL;
+    }
+
+    public void encodePassword(PasswordEncoder passwordEncoder){
+        this.password = passwordEncoder.encode(password);
+    }
+
+    public void setPassword(PasswordEncoder passwordEncoder, String password) {
+        this.password = passwordEncoder.encode(password);
+    }
+
+    public boolean matchPassword(PasswordEncoder passwordEncoder, String checkPassword){
+        return passwordEncoder.matches(checkPassword, getPassword());
+    }
+
+
 }

@@ -1,24 +1,33 @@
 package penterest.spring.domain.member.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import penterest.spring.domain.member.dto.MemberRequestDto;
 import penterest.spring.domain.member.dto.MemberResponseDto;
+import penterest.spring.domain.member.dto.MemberSignUpDto;
 import penterest.spring.domain.member.service.AuthService;
+import penterest.spring.domain.member.service.MemberService;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final MemberService memberService;
     private final AuthService authService;
 
-    @PostMapping("/signup")
-    public ResponseEntity<MemberResponseDto> signup(@RequestBody MemberRequestDto memberRequestDto) {
-        return ResponseEntity.ok(authService.signup(memberRequestDto));
+    @PostMapping("/signUp")
+    @ResponseStatus(HttpStatus.OK)
+    public void signUp(@Valid @RequestBody MemberSignUpDto memberSignUpDto) throws Exception {
+        memberService.signUp(memberSignUpDto);
+    }
+
+    @PostMapping("/login")
+    public void login(@RequestBody MemberSignUpDto memberSignUpDto) throws Exception {
+        authService.login(memberSignUpDto);
     }
 }
