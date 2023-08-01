@@ -1,5 +1,6 @@
 package penterest.spring.domain.gif.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import penterest.spring.domain.comment.dto.CommentInfoDto;
@@ -19,6 +20,7 @@ public class GifInfoDto {
     private String url;
     private String caption;
 
+    @JsonIgnoreProperties({"email", "password", "authority"}) // MemberInfoDto 클래스의 firstName, lastName 프로퍼티는 무시하도록 설정
     private MemberInfoDto memberInfoDto;
 
     private List<CommentInfoDto> commentInfoDtoList;

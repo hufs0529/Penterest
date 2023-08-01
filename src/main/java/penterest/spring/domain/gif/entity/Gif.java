@@ -1,14 +1,17 @@
 package penterest.spring.domain.gif.entity;
 
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import penterest.spring.domain.comment.entity.Comment;
 import penterest.spring.domain.member.entity.Authority;
 import penterest.spring.domain.member.entity.Member;
+import penterest.spring.domain.member.repository.MemberRepository;
 import penterest.spring.global.domain.BaseTimeEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Table(name = "gif")
 @Getter
@@ -16,6 +19,14 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Gif extends BaseTimeEntity {
+
+    static MemberRepository memberRepository;
+
+    @Autowired
+    public Gif(MemberRepository memberRepository) {
+
+        this.memberRepository = memberRepository;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,8 +50,6 @@ public class Gif extends BaseTimeEntity {
     public Gif(String caption, String url) {
         this.caption = caption;
         this.url = url;
-
-        this.writer = new Member("null@example.com", "null11223344!", Authority.NORMAL);
     }
 
     public void addComment(Comment comment) {
@@ -48,11 +57,10 @@ public class Gif extends BaseTimeEntity {
         commentList.add(comment);
     }
 
-    public void confirmWriter(Member writer) {
-        this.writer = writer;
+    public void confirmWriter(MemberRepository memberRepository, Member writer) {
+        Member defaultMember = memberRepository.findByEmail("user@example.com");
+        this.writer = writer != null ? writer : defaultMember;
+        writer.addGif(this);
     }
-
-
-
 
 }

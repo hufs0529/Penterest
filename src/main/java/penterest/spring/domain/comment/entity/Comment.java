@@ -3,9 +3,13 @@ package penterest.spring.domain.comment.entity;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.*;
 import penterest.spring.domain.gif.entity.Gif;
+import penterest.spring.domain.gif.repository.GifRepository;
 import penterest.spring.domain.member.entity.Member;
+import penterest.spring.domain.member.repository.MemberRepository;
+import penterest.spring.global.domain.BaseTimeEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +19,7 @@ import java.util.Optional;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Comment extends Serializers.Base {
+public class Comment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -35,7 +39,6 @@ public class Comment extends Serializers.Base {
     private Comment parent;
 
     @Lob
-    @Column(nullable = false)
     private String content;
 
     private boolean isRemoved = false;
@@ -45,8 +48,9 @@ public class Comment extends Serializers.Base {
     private List<Comment> childList = new ArrayList<>();
 
 
-    public void confirmWriter(Member writer) {
-        this.writer = writer;
+    public void confirmWriter(MemberRepository memberRepository, Member writer) {
+        Member defaultMember = memberRepository.findByEmail("user@example.com");
+        this.writer = writer != null ? writer : defaultMember;
         writer.addComment(this);
     }
 
@@ -61,6 +65,7 @@ public class Comment extends Serializers.Base {
     }
 
     public void addChild(Comment child) {
+
         childList.add(child);
     }
 

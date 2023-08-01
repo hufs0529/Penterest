@@ -57,6 +57,7 @@
 			<scope>test</scope>
 		</dependency>
 
+
 		<!--jwt토큰 의존성-->
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
 		<dependency>

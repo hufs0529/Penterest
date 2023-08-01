@@ -25,22 +25,22 @@ public class MemberController {
     @PutMapping("/password")
     @ResponseStatus(HttpStatus.OK)
     public void updatePassword(@Valid @RequestBody UpdatePasswordDto updatePasswordDto) throws Exception {
-        memberService.updatePassword(updatePasswordDto.checkPassword(), updatePasswordDto.toBePassword(), SecurityUtil.getLoingUserEmail());
+        memberService.updatePassword(updatePasswordDto.checkPassword(), updatePasswordDto.toBePassword(), SecurityUtil.getLoginUserEmail());
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete")
     @ResponseStatus(HttpStatus.OK)
     public void withdraw(@Valid @RequestBody MemberWithdrawDto memberWithdrawDto) throws Exception {
-        memberService.withdraw(memberWithdrawDto.checkPassword(), SecurityUtil.getLoingUserEmail());
+        memberService.withdraw(memberWithdrawDto.checkPassword(), SecurityUtil.getLoginUserEmail());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/search/{id}")
     public ResponseEntity getInfo(@Valid @PathVariable("id") Long id) throws Exception {
         MemberInfoDto memberInfoDto = memberService.getInfo(id);
         return new ResponseEntity(memberInfoDto, HttpStatus.OK);
     }
 
-    @GetMapping("/")
+    @GetMapping("/search")
     public ResponseEntity getMyInfo() throws Exception {
 
         MemberInfoDto memberInfoDto = memberService.getMyInfo();

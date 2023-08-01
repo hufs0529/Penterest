@@ -2,14 +2,9 @@ package penterest.spring.domain.member.dto;
 
 import lombok.*;
 
-@Getter
-@NoArgsConstructor
+@Getter @Setter @Builder
 @AllArgsConstructor
-@Builder
+@NoArgsConstructor
 public class TokenDto {
-
-    private String grantType;
-    private String accessToken;
-    private String refreshToken;
-    private Long accessTokenExpiresIn;
+    private String token;
 }

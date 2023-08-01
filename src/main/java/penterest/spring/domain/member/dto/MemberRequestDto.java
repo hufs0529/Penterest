@@ -8,6 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import penterest.spring.domain.member.entity.Authority;
 import penterest.spring.domain.member.entity.Member;
 
+import java.util.Set;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,12 +17,17 @@ public class MemberRequestDto {
 
     private String email;
     private String password;
+    private String authorityName;
+
+    Authority authority = Authority.builder()
+            .authorityName("NORMAL")
+            .build();
 
     public Member toMember(PasswordEncoder passwordEncoder) {
         return Member.builder()
                 .email(email)
                 .password(passwordEncoder.encode(password))
-                .authority(Authority.NORMAL)
+                .authorities(Set.of(authority))
                 .build();
     }
 

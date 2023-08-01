@@ -1,9 +1,6 @@
 package penterest.spring.domain.member.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import penterest.spring.domain.comment.entity.Comment;
 import penterest.spring.domain.gif.entity.Gif;
@@ -12,12 +9,14 @@ import penterest.spring.global.domain.BaseTimeEntity;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Table(name = "member")
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Member extends BaseTimeEntity {
 
     @Id
@@ -29,14 +28,19 @@ public class Member extends BaseTimeEntity {
 
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Authority authority;
+    @ManyToMany
+    @JoinTable(
+            name = "user_authority",
+            joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "member_id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+    private Set<Authority> authorities;
+
 
     @Builder
-    public Member(String email, String password, Authority authority) {
+    public Member(String email, String password, Set<Authority> authorities) {
         this.email = email;
         this.password = password;
-        this.authority = Authority.NORMAL;
+        this.authorities = authorities;
     }
 
     @OneToMany(mappedBy = "writer") //== 회원탈퇴 -> 작성한 게시물, 댓글 모두 삭제 ==//cascade = ALL, orphanRemoval = true
@@ -44,6 +48,7 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "writer")
     private List<Comment> commentList = new ArrayList<>();
+
 
     public void addGif(Gif gif) {
         // gif의 writer설정은 gif에서 함
@@ -54,9 +59,6 @@ public class Member extends BaseTimeEntity {
         commentList.add(comment);
     }
 
-    public void addUserAuthority() {
-        this.authority = Authority.NORMAL;
-    }
 
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);

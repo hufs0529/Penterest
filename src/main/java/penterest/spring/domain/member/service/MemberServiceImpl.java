@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import penterest.spring.domain.member.dto.MemberInfoDto;
 import penterest.spring.domain.member.dto.MemberSignUpDto;
 import penterest.spring.domain.member.dto.TokenDto;
+import penterest.spring.domain.member.entity.Authority;
 import penterest.spring.domain.member.entity.Member;
 import penterest.spring.domain.member.entity.RefreshToken;
 import penterest.spring.domain.member.repository.MemberRepository;
@@ -24,19 +25,32 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
+
+//    public Member getOrCreateDefaultMember() {
+//        String defaultEmail = "default@example.com";
+//        Member existingMember = memberRepository.findByEmail(defaultEmail);
+//
+//        if (existingMember != null) {
+//            return existingMember;
+//        } else {
+//            Member newMember = new Member();
+//            newMember.setEmail(defaultEmail);
+//            newMember.setPassword("default1234!");
+//            newMember.setAuthorities();
+//            return memberRepository.save(newMember);
+//        }
+//    }
+
     @Override
     @Transactional
     public void signUp(MemberSignUpDto memberSignUpDto) throws Exception {
         Member member = memberSignUpDto.toEntity();
 
-        //member.addUserAuthority();
-
         member.encodePassword(passwordEncoder);
 
-        if (memberRepository.existsByEmail(memberSignUpDto.email())) {
+        if (memberRepository.existsByEmail(memberSignUpDto.getEmail())) {
             throw new Exception();
         }
-
         memberRepository.save(member);
 
     }
@@ -76,7 +90,7 @@ public class MemberServiceImpl implements MemberService {
      * 내정보 가져오기
      */
     public MemberInfoDto getMyInfo(){
-        Member findMember = memberRepository.findByEmail(SecurityUtil.getLoingUserEmail());
+        Member findMember = memberRepository.findByEmail(SecurityUtil.getLoginUserEmail());
         return new MemberInfoDto(findMember);
     }
 

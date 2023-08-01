@@ -22,7 +22,7 @@ public class GifController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/save")
-    public void save(@Valid @ModelAttribute GifSaveDto gifSaveDto) throws Exception {
+    public void save(@Valid @RequestBody GifSaveDto gifSaveDto) throws Exception {
         gifService.save(gifSaveDto);
     }
 

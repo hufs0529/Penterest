@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import penterest.spring.domain.comment.dto.CommentSaveDto;
 import penterest.spring.domain.comment.dto.CommentUpdateDto;
+import penterest.spring.domain.comment.entity.Comment;
 import penterest.spring.domain.comment.service.CommentService;
 
 @RestController
@@ -17,13 +18,13 @@ public class CommentController {
 
     @PostMapping("/save/{gifId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void commentSave(@PathVariable("postId") Long postId, CommentSaveDto commentSaveDto){
-        commentService.save(postId, commentSaveDto);
+    public void commentSave(@PathVariable("gifId") Long gifId, CommentSaveDto commentSaveDto){
+        commentService.save(gifId, commentSaveDto);
     }
 
     @PostMapping("/save/{gifId}/{commentId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void reCommentSave(@PathVariable("postId") Long gifId,
+    public void reCommentSave(@PathVariable("gifId") Long gifId,
                               @PathVariable("commentId") Long commentId,
                               CommentSaveDto commentSaveDto) {
         commentService.saveReComment(gifId, commentId, commentSaveDto);
