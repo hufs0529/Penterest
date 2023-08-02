@@ -26,15 +26,15 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
-    public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
-        if (memberRepository.existsByEmail(memberRequestDto.getEmail())){
-            throw new RuntimeException("이미 가입된 유저입니다");
-        }
-
-        Member member = memberRequestDto.toMember(passwordEncoder);
-        return MemberResponseDto.of(memberRepository.save(member));
-    }
+//    @Transactional
+//    public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
+//        if (memberRepository.existsByEmail(memberRequestDto.getEmail())){
+//            throw new RuntimeException("이미 가입된 유저입니다");
+//        }
+//
+//        Member member = memberRequestDto.toMember(passwordEncoder);
+//        return MemberResponseDto.of(memberRepository.save(member));
+//    }
 
 //    @Transactional
 //    public TokenDto login(MemberSignUpDto memberSignUpDto) {

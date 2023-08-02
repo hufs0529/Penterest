@@ -22,17 +22,14 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class TokenProvider implements InitializingBean {
-
     private static final String AUTHORITIES_KEY = "auth";
-
+    private static final String BEARER_TYPE = "Bearer";
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.token-validity-in-seconds}")
-    private long tokenValidityInMilliseconds;
 
     private Key key;
-
 
     @Override
     public void afterPropertiesSet() {
@@ -46,7 +43,7 @@ public class TokenProvider implements InitializingBean {
                 .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
-        Date validity = new Date(now + this.tokenValidityInMilliseconds);
+        Date validity = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
