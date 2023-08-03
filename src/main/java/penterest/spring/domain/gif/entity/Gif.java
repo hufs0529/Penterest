@@ -11,7 +11,6 @@ import penterest.spring.global.domain.BaseTimeEntity;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Table(name = "gif")
 @Getter
