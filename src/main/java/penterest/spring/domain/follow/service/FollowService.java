@@ -7,10 +7,10 @@ import penterest.spring.domain.follow.repository.FollowRepository;
 import penterest.spring.domain.member.entity.Member;
 import penterest.spring.domain.member.repository.MemberRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,41 +57,49 @@ public class FollowService {
         return followRepository.findByToMemberAndFromMember(toAccount, fromAccount);
     }
 
-//    public List<Member> findFollowingMembers(String email) {
-//        Member member = memberRepository.findByEmail(email);
-//        List<Follow> followingList = followRepository.findByFromMember(member.getId());
-//        return followingList.stream().map(Follow::getToAccount).map(memberRepository::findById).toList();
+    public List<Follow> findFollowingMembers(String email) {
+        List<Follow> following = new ArrayList<>();
+        Member member = memberRepository.findByEmail(email);
+        if (member != null) {
+            following = followRepository.findByFromMember(member.getEmail());
+        }
+        return following;
+    }
+
+
+    public List<Follow> findFollowerMembers(String email) {
+        List<Follow> following = new ArrayList<>();
+        Member member = memberRepository.findByEmail(email);
+        if (member != null) {
+            following = followRepository.findByToMember(member.getEmail());
+        }
+        return following;
+    }
+
+
+//    public List<String> getFollowingList(String email) throws Exception {
+//        List<Member> followingList = (List<Member>) memberRepository.findAllByEmail(email);
+//
+//        // Check if the list is not empty and return an appropriate response
+//        if (followingList.isEmpty()) {
+//            throw new Exception("없음");
+//        } else {
+//            List<String> emailList = followingList.stream().map(Member::getEmail).collect(Collectors.toList());
+//            return emailList;
+//        }
 //    }
 //
-//    public List<Member> findFollowerMembers(String email) {
-//        Member member = memberRepository.findByEmail(email);
-//        Follow followerList = followRepository.findByToMember(member.getId());
-//        return followerList.stream().map(Follow::getFromAccount).map(memberRepository::findById).toList();
+//    public List<String> getFollowerList(String email) throws Exception {
+//        List<Member> followerList = (List<Member>) memberRepository.findAllByEmail(email);
+//
+//        // Check if the list is not empty and return an appropriate response
+//        if (followerList.isEmpty()) {
+//            throw new Exception("없음");
+//        } else {
+//            List<String> emailList = followerList.stream().map(Member::getEmail).collect(Collectors.toList());
+//            return emailList;
+//        }
 //    }
-
-    public List<String> getFollowingList(String email) throws Exception {
-        List<Member> followingList = (List<Member>) memberRepository.findAllByEmail(email);
-
-        // Check if the list is not empty and return an appropriate response
-        if (followingList.isEmpty()) {
-            throw new Exception("없음");
-        } else {
-            List<String> emailList = followingList.stream().map(Member::getEmail).collect(Collectors.toList());
-            return emailList;
-        }
-    }
-
-    public List<String> getFollowerList(String email) throws Exception {
-        List<Member> followerList = (List<Member>) memberRepository.findAllByEmail(email);
-
-        // Check if the list is not empty and return an appropriate response
-        if (followerList.isEmpty()) {
-            throw new Exception("없음");
-        } else {
-            List<String> emailList = followerList.stream().map(Member::getEmail).collect(Collectors.toList());
-            return emailList;
-        }
-    }
 
 //    public Long getFollowingCount(String email) {
 //        Member member = memberRepository.findByEmail(email);

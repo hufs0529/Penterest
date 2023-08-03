@@ -15,10 +15,9 @@ public interface FollowRepository extends JpaRepository<Follow, Follow.PK> {
 
 //    Long countByToAccount(Long memberId);
 //    Long countByFromAccount(Long memberId);
-    @Query(value = "select m from Follow f INNER JOIN Member m ON f.toMember = m.email where f.fromMember = :toMember")
-    List<Follow> findAllByToMember(@Param("toMember") String toMember);
+    @Query(value = "select f from Follow f where f.fromMember = :toMember")
+    List<Follow> findByFromMember(@Param("toMember") String toMember);
 
-
-    @Query(value = "select m from Follow f INNER JOIN Member m ON f.fromMember = m.email where f.toMember = :fromMember")
-    List<Follow> findAllByFromMember(@Param("fromMember") String fromMember);
+    @Query(value = "select f from Follow f where f.toMember = :fromMember")
+    List<Follow> findByToMember(@Param("fromMember") String fromMember);
 }

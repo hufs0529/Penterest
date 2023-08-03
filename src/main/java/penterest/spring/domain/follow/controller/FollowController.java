@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import penterest.spring.domain.follow.entity.Follow;
 import penterest.spring.domain.follow.service.FollowService;
 
 import java.util.List;
@@ -28,14 +29,14 @@ public class FollowController {
     }
 
     @GetMapping("/follower/{account}")
-    public ResponseEntity<List<String>> getFollower(@PathVariable String account) throws Exception {
-        List<String> followingEmails = followService.getFollowerList(account);
+    public ResponseEntity<List<Follow>> getFollower(@PathVariable String account) throws Exception {
+        List<Follow> followingEmails = followService.findFollowerMembers(account);
         return ResponseEntity.ok(followingEmails);
     }
 
     @GetMapping("/following/{account}")
-    public ResponseEntity<List<String>> getFollowing(@PathVariable String account) throws Exception {
-        List<String> followingEmails = followService.getFollowingList(account);
+    public ResponseEntity<List<Follow>> getFollowing(@PathVariable String account) throws Exception {
+        List<Follow> followingEmails = followService.findFollowingMembers(account);
         return ResponseEntity.ok(followingEmails);
     }
 
