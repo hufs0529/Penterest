@@ -40,4 +40,20 @@ public class FollowController {
         return ResponseEntity.ok(followingEmails);
     }
 
+    @GetMapping("/getFollowingCount/{account}")
+    public ResponseEntity<Long> getFollowingCount(@PathVariable String account){
+        long followingCount = followService.getFollowingCount(account);
+
+        return ResponseEntity.ok(followingCount);
+    }
+
+    @GetMapping("/getFollowerCount/{account}")
+    public ResponseEntity<Long> getFollowerCount(@PathVariable String account) {
+        long followerCount = followService.getFollowerCount(account);
+
+        return ResponseEntity.ok(followerCount);
+    }
+
 }
+
+

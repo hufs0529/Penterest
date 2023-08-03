@@ -13,8 +13,8 @@ public interface FollowRepository extends JpaRepository<Follow, Follow.PK> {
 
     Optional<Follow> findByToMemberAndFromMember(String toMember, String fromMember);
 
-//    Long countByToAccount(Long memberId);
-//    Long countByFromAccount(Long memberId);
+    //String countByToAccount(String email);
+    //String countByFromAccount(String email);
     @Query(value = "select f from Follow f where f.fromMember = :toMember")
     List<Follow> findByFromMember(@Param("toMember") String toMember);
 

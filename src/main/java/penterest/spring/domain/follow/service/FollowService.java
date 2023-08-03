@@ -73,7 +73,18 @@ public class FollowService {
         if (member != null) {
             following = followRepository.findByToMember(member.getEmail());
         }
+
         return following;
+    }
+
+    public Long getFollowingCount(String email) {
+        List<Follow> response = findFollowerMembers(email);
+        return (long) response.size();
+    }
+
+    public Long getFollowerCount(String email) {
+        List<Follow> response = findFollowerMembers(email);
+        return (long) response.size();
     }
 
 
