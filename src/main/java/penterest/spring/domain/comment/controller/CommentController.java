@@ -3,11 +3,14 @@ package penterest.spring.domain.comment.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import penterest.spring.domain.comment.dto.CommentSaveDto;
 import penterest.spring.domain.comment.dto.CommentUpdateDto;
 import penterest.spring.domain.comment.entity.Comment;
 import penterest.spring.domain.comment.service.CommentService;
+import penterest.spring.domain.gif.entity.Gif;
+import penterest.spring.domain.gif.service.GifService;
 
 @RestController
 @RequestMapping("/comment")
@@ -15,6 +18,7 @@ import penterest.spring.domain.comment.service.CommentService;
 public class CommentController {
 
     private final CommentService commentService;
+    private final GifService gifService;
 
     @PostMapping("/save/{gifId}")
     @ResponseStatus(HttpStatus.CREATED)
@@ -40,4 +44,5 @@ public class CommentController {
     public void delete(@PathVariable("commentId") Long commentId) throws Exception {
         commentService.remove(commentId);
     }
+
 }

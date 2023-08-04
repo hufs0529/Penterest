@@ -92,4 +92,5 @@ public class CommentServiceImpl implements  CommentService{
         List<Comment> removableCommentList = comment.findRemovableList();
         commentRepository.deleteAll(removableCommentList);
     }
+
 }

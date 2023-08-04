@@ -94,6 +94,19 @@
 			<version>2.0.1.Final</version> <!-- or the latest version available -->
 		</dependency>
 
+		<!-- Spring Boot Elasticsearch Starter -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-elasticsearch</artifactId>
+			<version>5.0.3</version>
+		</dependency>
+
+		<!-- Elastic Search -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

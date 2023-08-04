@@ -1,5 +1,8 @@
 package penterest.spring.domain.comment.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.*;
 import penterest.spring.domain.gif.entity.Gif;
@@ -32,11 +35,14 @@ public class Comment extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gif_id")
+    @JsonBackReference
     private Gif gif;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
+    @JsonBackReference
     private Comment parent;
+
 
     @Lob
     private String content;
@@ -45,6 +51,7 @@ public class Comment extends BaseTimeEntity {
 
     // 부모 댓글 삭제해도 자식 댓그 존재
     @OneToMany(mappedBy = "parent")
+    @JsonIgnore
     private List<Comment> childList = new ArrayList<>();
 
 

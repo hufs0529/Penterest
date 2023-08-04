@@ -1,8 +1,12 @@
 package penterest.spring.domain.gif.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import penterest.spring.domain.comment.entity.Comment;
+import penterest.spring.domain.gif.dto.BriefGifInfo;
 import penterest.spring.domain.member.entity.Authority;
 import penterest.spring.domain.member.entity.Member;
 import penterest.spring.domain.member.repository.MemberRepository;
@@ -23,7 +27,6 @@ public class Gif extends BaseTimeEntity {
 
     @Autowired
     public Gif(MemberRepository memberRepository) {
-
         this.memberRepository = memberRepository;
     }
 
@@ -34,6 +37,7 @@ public class Gif extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "writer_id")
+    @JsonBackReference
     private Member writer;
 
     @Lob
@@ -43,6 +47,7 @@ public class Gif extends BaseTimeEntity {
 
     // 게시글 삭제하면 달려있는 댓글 모두 삭제
     @OneToMany(mappedBy = "gif", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Comment> commentList = new ArrayList<>();
 
     @Builder

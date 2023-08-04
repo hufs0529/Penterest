@@ -3,6 +3,7 @@ package penterest.spring.domain.comment.service;
 import penterest.spring.domain.comment.dto.CommentSaveDto;
 import penterest.spring.domain.comment.dto.CommentUpdateDto;
 import penterest.spring.domain.comment.entity.Comment;
+import penterest.spring.domain.gif.entity.Gif;
 
 public interface CommentService {
 

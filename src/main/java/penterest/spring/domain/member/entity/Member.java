@@ -1,5 +1,6 @@
 package penterest.spring.domain.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import penterest.spring.domain.comment.entity.Comment;
@@ -44,6 +45,7 @@ public class Member extends BaseTimeEntity {
     }
 
     @OneToMany(mappedBy = "writer") //== 회원탈퇴 -> 작성한 게시물, 댓글 모두 삭제 ==//cascade = ALL, orphanRemoval = true
+    @JsonManagedReference
     private List<Gif> gifList = new ArrayList<>();
 
     @OneToMany(mappedBy = "writer")

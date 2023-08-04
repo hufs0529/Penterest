@@ -1,17 +1,21 @@
 package penterest.spring.domain.gif.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import penterest.spring.domain.gif.dto.BriefGifInfo;
 import penterest.spring.domain.gif.dto.GifInfoDto;
 import penterest.spring.domain.gif.dto.GifSaveDto;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.domain.gif.repository.GifRepository;
+import penterest.spring.domain.gif.repository.GifSearchQueryRepository;
 import penterest.spring.domain.member.entity.Member;
 import penterest.spring.domain.member.repository.MemberRepository;
 import penterest.spring.global.security.util.SecurityUtil;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -22,6 +26,7 @@ public class GifServiceImpl implements  GifService{
     private final GifRepository gifRepository;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final GifSearchQueryRepository gifSearchQueryRepository;
 
 
 
@@ -68,5 +73,32 @@ public class GifServiceImpl implements  GifService{
         return new GifInfoDto(gifRepository.findWriterById(id)
                 .orElseThrow( ()-> new Exception()));
     }
+
+    @Override
+    public String findWriterEmailByGifId(Long gifId) {
+        return gifRepository.findWriterEmailByGifId(gifId);
+    }
+
+    @Override
+    public List<BriefGifInfo> findByCaption(String caption) {
+        return null;
+    }
+
+    @Override
+    public List<BriefGifInfo> findByMatchesCaption(String caption) {
+        return gifSearchQueryRepository.findByMatchesCaption(caption)
+                .stream()
+                .map(BriefGifInfo::from)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BriefGifInfo> findByContainsCaption(String caption) {
+        return gifSearchQueryRepository.findByContainsCaption(caption)
+                .stream()
+                .map(BriefGifInfo::from)
+                .collect(Collectors.toList());
+    }
+
 
 }
