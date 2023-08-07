@@ -1,10 +1,10 @@
 package penterest.spring.global.elasticsearch.config;
-import org.elasticsearch.client.RestHighLevelClient;
 
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.elasticsearch.client.erhlc.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.config.ElasticsearchConfigurationSupport;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverter;
 
 public abstract class AbstractElasticsearchConfiguration extends ElasticsearchConfigurationSupport {

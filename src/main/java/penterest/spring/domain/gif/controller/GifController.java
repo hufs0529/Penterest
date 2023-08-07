@@ -57,6 +57,6 @@ public class GifController {
         return ResponseEntity.ok(writerEmail);
     }
 
-    @GetMapping
+    //@GetMapping
 
 }
