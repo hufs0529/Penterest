@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import penterest.spring.domain.gif.dto.GifInfoByEmailDto;
-import penterest.spring.domain.gif.dto.GifInfoDto;
+import penterest.spring.domain.gif.dto.BriefGifInfo;
 import penterest.spring.domain.gif.dto.GifSaveDto;
+import penterest.spring.domain.gif.entity.Gif;
+import penterest.spring.domain.gif.entity.GifDocument;
+import penterest.spring.domain.gif.repository.GifSearchQueryRepository;
 import penterest.spring.domain.gif.service.GifService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/gif")
@@ -17,7 +20,7 @@ import javax.validation.Valid;
 public class GifController {
 
     private final GifService gifService;
-
+    private final GifSearchQueryRepository gifSearchQueryRepository;
 
     /**
      * 게시글 저장
@@ -54,4 +57,15 @@ public class GifController {
         return ResponseEntity.ok(writerEmail);
     }
 
+    @PostMapping("/migrate")
+    public ResponseEntity<String> migrateGifInfoDtosToElasticsearch() {
+        gifService.migrateGifInfoDtosToElasticsearch();
+        return ResponseEntity.ok("Migration completed.");
+    }
+
+    @GetMapping("/search/{caption}")
+    public ResponseEntity<List<GifDocument>> searchByCaption(@PathVariable  String caption) {
+        List<GifDocument> gifs = gifService.searchByCaption(caption);
+        return ResponseEntity.ok(gifs);
+    }
 }

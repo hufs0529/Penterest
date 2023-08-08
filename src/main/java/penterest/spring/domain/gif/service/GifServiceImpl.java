@@ -4,11 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import penterest.spring.domain.gif.converter.GifInfoDtoToGifDocumentConverter;
 import penterest.spring.domain.gif.dto.BriefGifInfo;
 import penterest.spring.domain.gif.dto.GifInfoByEmailDto;
 import penterest.spring.domain.gif.dto.GifInfoDto;
 import penterest.spring.domain.gif.dto.GifSaveDto;
 import penterest.spring.domain.gif.entity.Gif;
+import penterest.spring.domain.gif.entity.GifDocument;
+import penterest.spring.domain.gif.repository.GIfSearchRepository;
 import penterest.spring.domain.gif.repository.GifRepository;
 import penterest.spring.domain.gif.repository.GifSearchQueryRepository;
 import penterest.spring.domain.member.entity.Member;
@@ -29,6 +32,8 @@ public class GifServiceImpl implements  GifService{
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final GifSearchQueryRepository gifSearchQueryRepository;
+    private final GIfSearchRepository gIfSearchRepository;
+    private final GifInfoDtoToGifDocumentConverter converter;
 
 
 
@@ -101,5 +106,21 @@ public class GifServiceImpl implements  GifService{
                 .stream()
                 .map(BriefGifInfo::from)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void migrateGifInfoDtosToElasticsearch() {
+        List<Gif> gifs = gifRepository.findAll();
+
+        List<GifDocument> gifDocumentList = gifs.stream()
+                .map(converter::convert)
+                .collect(Collectors.toList());
+
+        gIfSearchRepository.saveAll(gifDocumentList);
+    }
+
+    @Override
+    public List<GifDocument> searchByCaption(String caption) {
+        return gifSearchQueryRepository.findByMatchesCaption(caption);
     }
 }

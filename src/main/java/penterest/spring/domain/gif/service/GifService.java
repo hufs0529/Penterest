@@ -6,6 +6,7 @@ import penterest.spring.domain.gif.dto.GifInfoByEmailDto;
 import penterest.spring.domain.gif.dto.GifInfoDto;
 import penterest.spring.domain.gif.dto.GifSaveDto;
 import penterest.spring.domain.gif.entity.Gif;
+import penterest.spring.domain.gif.entity.GifDocument;
 
 import java.util.List;
 
@@ -27,4 +28,7 @@ public interface GifService {
 
     List<BriefGifInfo> findByContainsCaption(String caption);
 
+    void migrateGifInfoDtosToElasticsearch();
+
+    List<GifDocument> searchByCaption(String caption);
 }
