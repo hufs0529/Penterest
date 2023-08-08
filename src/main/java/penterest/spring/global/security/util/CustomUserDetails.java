@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import penterest.spring.domain.member.entity.Member;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,58 +13,46 @@ import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
 
-    private String id;
-    private String pw;
-    private String authority;
-    private String email;
+    private Member member;
+
+    public CustomUserDetails(Member member) {
+        this.member = member;
+    }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        ArrayList<GrantedAuthority> auth = new ArrayList<>();
-        // Ensure that 'authority' field is not null or empty
-        if (authority != null && !authority.isEmpty()) {
-            auth.add(new SimpleGrantedAuthority(authority));
-        }
-        return auth;
+        return null;
     }
 
     @Override
     public String getPassword() {
-        return pw;
+        return member.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
+        return member.getEmail();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

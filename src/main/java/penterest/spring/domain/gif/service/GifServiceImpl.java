@@ -1,12 +1,13 @@
 package penterest.spring.domain.gif.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import penterest.spring.domain.gif.converter.GifInfoDtoToGifDocumentConverter;
 import penterest.spring.domain.gif.dto.BriefGifInfo;
-import penterest.spring.domain.gif.dto.GifInfoByEmailDto;
 import penterest.spring.domain.gif.dto.GifInfoDto;
 import penterest.spring.domain.gif.dto.GifSaveDto;
 import penterest.spring.domain.gif.entity.Gif;
@@ -16,9 +17,7 @@ import penterest.spring.domain.gif.repository.GifRepository;
 import penterest.spring.domain.gif.repository.GifSearchQueryRepository;
 import penterest.spring.domain.member.entity.Member;
 import penterest.spring.domain.member.repository.MemberRepository;
-import penterest.spring.global.security.util.SecurityUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,28 +29,49 @@ public class GifServiceImpl implements  GifService{
 
     private final GifRepository gifRepository;
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
     private final GifSearchQueryRepository gifSearchQueryRepository;
     private final GIfSearchRepository gIfSearchRepository;
     private final GifInfoDtoToGifDocumentConverter converter;
 
 
 
+//    @Override
+//    public void save(GifSaveDto gifSaveDto) {
+//        Gif gif = gifSaveDto.toEntity();
+//        Member defaultMember = memberRepository.findByEmail("user@example.com");
+//
+//        if (checkAuthority(gif)) {
+//            // Gif 엔티티를 저장하기 전에 Member 엔티티를 먼저 저장해야 합니다.
+//            Member member = memberRepository.findByEmail(gif.getWriter().getEmail());
+//            member.encodePassword(passwordEncoder);
+//            gif.confirmWriter(memberRepository, member); // memberRepository를 인자로 전달
+//        } else {
+//            memberRepository.save(defaultMember);
+//            gif.confirmWriter(memberRepository, defaultMember); // memberRepository를 인자로 전달
+//        }
+//        gifRepository.save(gif);
+//    }
+
     @Override
     public void save(GifSaveDto gifSaveDto) {
-        Gif gif = gifSaveDto.toEntity();
-        Member defaultMember = memberRepository.findByEmail("user@example.com");
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails) principal).getUsername();
 
-        if (checkAuthority(gif)) {
-            // Gif 엔티티를 저장하기 전에 Member 엔티티를 먼저 저장해야 합니다.
-            Member member = memberRepository.findByEmail(gif.getWriter().getEmail());
-            member.encodePassword(passwordEncoder);
-            gif.confirmWriter(memberRepository, member); // memberRepository를 인자로 전달
-        } else {
-            memberRepository.save(defaultMember);
-            gif.confirmWriter(memberRepository, defaultMember); // memberRepository를 인자로 전달
-        }
+        Gif gif = gifSaveDto.toEntity();
+        Member member = memberRepository.findByEmail(email);
+        gif.confirmWriter(memberRepository, member);
+
         gifRepository.save(gif);
+    }
+
+
+    private boolean checkAuthority(Gif gif) {
+        //String loginUserEmail = SecurityUtil.getLoginUserEmail();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails) principal).getUsername();
+
+        Member writer = gif.getWriter();
+        return writer != null && writer.getEmail().equals(email);
     }
 
 
@@ -68,11 +88,6 @@ public class GifServiceImpl implements  GifService{
     }
 
 
-    private boolean checkAuthority(Gif gif) {
-        String loginUserEmail = SecurityUtil.getLoginUserEmail();
-        Member writer = gif.getWriter();
-        return writer != null && writer.getEmail().equals(loginUserEmail);
-    }
 
     @Override
     public GifInfoDto getGifInfo(Long id) throws Exception {

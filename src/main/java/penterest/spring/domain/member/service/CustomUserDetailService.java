@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import penterest.spring.domain.member.entity.Member;
 import penterest.spring.domain.member.repository.MemberRepository;
+import penterest.spring.global.security.util.CustomUserDetails;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,18 +23,14 @@ import java.util.stream.Collectors;
 public class CustomUserDetailService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
-
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberRepository.findByEmail(username);
-        return User.builder().username(member.getEmail())
-                .password(member.getPassword())
-                .authorities(member.getAuthorities().stream()
-                        .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
-                        .collect(Collectors.toSet()))
-                .build();
+        Optional<Member> member = Optional.ofNullable(memberRepository.findByEmail(username));
+        if(member.isPresent()){
+            return new CustomUserDetails(member.get());
+        }
+        throw new UsernameNotFoundException("사용자를 찾을 수 없습니다");
     }
 }
