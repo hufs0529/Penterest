@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import penterest.spring.domain.gif.dto.GifInfoDto;
+import penterest.spring.domain.member.dto.MemberGifDto;
 import penterest.spring.domain.member.dto.MemberInfoDto;
 import penterest.spring.domain.member.dto.MemberSignUpDto;
 import penterest.spring.domain.member.dto.TokenDto;
@@ -17,6 +19,9 @@ import penterest.spring.domain.member.repository.MemberRepository;
 import penterest.spring.domain.member.repository.RefreshTokenRepository;
 import penterest.spring.global.jwt.TokenProvider;
 import penterest.spring.global.security.util.SecurityUtil;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +65,7 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = memberRepository.findByEmail(email);
 
-        if(!member.matchPassword(passwordEncoder, beforePW)){
+        if (!member.matchPassword(passwordEncoder, beforePW)) {
             throw new Exception();
         }
 
@@ -71,7 +76,7 @@ public class MemberServiceImpl implements MemberService {
     public void withdraw(String checkPassword, String email) throws Exception {
         Member member = memberRepository.findByEmail(email);
 
-        if(!member.matchPassword(passwordEncoder, checkPassword)) {
+        if (!member.matchPassword(passwordEncoder, checkPassword)) {
             throw new Exception();
         }
 
@@ -89,9 +94,25 @@ public class MemberServiceImpl implements MemberService {
     /**
      * 내정보 가져오기
      */
-    public MemberInfoDto getMyInfo(){
+    public MemberInfoDto getMyInfo() {
         Member findMember = memberRepository.findByEmail(SecurityUtil.getLoginUserEmail());
         return new MemberInfoDto(findMember);
     }
+
+    @Override
+    public List<MemberGifDto> getGifInfoByEmail(String email) throws Exception {
+        Member member = memberRepository.findByEmail(email);
+        if (member == null) {
+            // Handle the case when member is not found
+            return null; // or throw an exception
+        }
+
+        List<MemberGifDto> gifDtoList = member.getGifList().stream()
+                .map(gif -> new MemberGifDto(gif.getId(), gif.getUrl(), gif.getCaption()))
+                .collect(Collectors.toList());
+
+        return gifDtoList;
+    }
+
 
 }

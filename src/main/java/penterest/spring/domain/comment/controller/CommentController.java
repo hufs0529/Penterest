@@ -22,7 +22,8 @@ public class CommentController {
 
     @PostMapping("/save/{gifId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void commentSave(@PathVariable("gifId") Long gifId, CommentSaveDto commentSaveDto){
+    public void commentSave(@PathVariable("gifId") Long gifId,
+                            @RequestBody CommentSaveDto commentSaveDto){
         commentService.save(gifId, commentSaveDto);
     }
 
@@ -30,13 +31,13 @@ public class CommentController {
     @ResponseStatus(HttpStatus.CREATED)
     public void reCommentSave(@PathVariable("gifId") Long gifId,
                               @PathVariable("commentId") Long commentId,
-                              CommentSaveDto commentSaveDto) {
+                              @RequestBody CommentSaveDto commentSaveDto) {
         commentService.saveReComment(gifId, commentId, commentSaveDto);
     }
 
     @PutMapping("/update/{commentId}")
     public void update(@PathVariable("commentId") Long commentId,
-                       CommentUpdateDto commentUpdateDto) throws Exception {
+                       @RequestBody CommentUpdateDto commentUpdateDto) throws Exception {
         commentService.update(commentId, commentUpdateDto);
     }
 

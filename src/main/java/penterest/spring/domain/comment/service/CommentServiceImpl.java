@@ -29,7 +29,6 @@ public class CommentServiceImpl implements  CommentService{
 
 
     public void save(Long gifId, CommentSaveDto commentSaveDto) {
-        Comment comment = commentSaveDto.toEntity();
         String loggedInUserEmail = SecurityUtil.getLoginUserEmail();
         Member writer = memberRepository.findByEmail(loggedInUserEmail);
 
@@ -40,12 +39,11 @@ public class CommentServiceImpl implements  CommentService{
 
         Gif gif = gifRepository.findById(gifId).orElseThrow();
 
+        Comment comment = commentSaveDto.toEntity();
         comment.confirmWriter(memberRepository, writer);
         comment.confirmGif(gif);
         commentRepository.save(comment);
     }
-
-
 
     @Override
     public void saveReComment(Long gifId, Long parentId, CommentSaveDto commentSaveDto) {

@@ -40,15 +40,17 @@ public class Gif extends BaseTimeEntity {
     @JsonBackReference
     private Member writer;
 
+    // 게시글 삭제하면 달려있는 댓글 모두 삭제
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "gif", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Comment> commentList = new ArrayList<>();
+
     @Lob
     private String caption;
 
     private String url;
 
-    // 게시글 삭제하면 달려있는 댓글 모두 삭제
-    @OneToMany(mappedBy = "gif", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<Comment> commentList = new ArrayList<>();
+
 
     @Builder
     public Gif(String caption, String url) {

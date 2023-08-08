@@ -32,6 +32,4 @@ public class Like {
         this.member = member;
         this.gif = gif;
     }
-
-
 }

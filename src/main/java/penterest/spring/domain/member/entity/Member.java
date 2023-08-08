@@ -36,6 +36,12 @@ public class Member extends BaseTimeEntity {
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
     private Set<Authority> authorities;
 
+    @OneToMany(mappedBy = "writer") //== 회원탈퇴 -> 작성한 게시물, 댓글 모두 삭제 ==//cascade = ALL, orphanRemoval = true
+    @JsonManagedReference
+    private List<Gif> gifList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "writer")
+    private List<Comment> commentList = new ArrayList<>();
 
     @Builder
     public Member(String email, String password, Set<Authority> authorities) {
@@ -44,12 +50,7 @@ public class Member extends BaseTimeEntity {
         this.authorities = authorities;
     }
 
-    @OneToMany(mappedBy = "writer") //== 회원탈퇴 -> 작성한 게시물, 댓글 모두 삭제 ==//cascade = ALL, orphanRemoval = true
-    @JsonManagedReference
-    private List<Gif> gifList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "writer")
-    private List<Comment> commentList = new ArrayList<>();
 
 
     public void addGif(Gif gif) {

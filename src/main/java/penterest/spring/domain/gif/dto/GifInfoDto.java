@@ -20,7 +20,7 @@ public class GifInfoDto {
     private String url;
     private String caption;
 
-    @JsonIgnoreProperties({"email", "password", "authority"}) // MemberInfoDto 클래스의 firstName, lastName 프로퍼티는 무시하도록 설정
+    //@JsonIgnoreProperties({"email", "password", "authority"}) // MemberInfoDto 클래스의 firstName, lastName 프로퍼티는 무시하도록 설정
     private MemberInfoDto memberInfoDto;
 
     private List<CommentInfoDto> commentInfoDtoList;

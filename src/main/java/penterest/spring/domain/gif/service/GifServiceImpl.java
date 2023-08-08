@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import penterest.spring.domain.gif.dto.BriefGifInfo;
+import penterest.spring.domain.gif.dto.GifInfoByEmailDto;
 import penterest.spring.domain.gif.dto.GifInfoDto;
 import penterest.spring.domain.gif.dto.GifSaveDto;
 import penterest.spring.domain.gif.entity.Gif;
@@ -14,6 +15,7 @@ import penterest.spring.domain.member.entity.Member;
 import penterest.spring.domain.member.repository.MemberRepository;
 import penterest.spring.global.security.util.SecurityUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,6 +76,7 @@ public class GifServiceImpl implements  GifService{
                 .orElseThrow( ()-> new Exception()));
     }
 
+
     @Override
     public String findWriterEmailByGifId(Long gifId) {
         return gifRepository.findWriterEmailByGifId(gifId);
@@ -99,8 +102,4 @@ public class GifServiceImpl implements  GifService{
                 .map(BriefGifInfo::from)
                 .collect(Collectors.toList());
     }
-
-
-
-
 }
