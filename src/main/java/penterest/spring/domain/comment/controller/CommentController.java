@@ -9,8 +9,9 @@ import penterest.spring.domain.comment.dto.CommentSaveDto;
 import penterest.spring.domain.comment.dto.CommentUpdateDto;
 import penterest.spring.domain.comment.entity.Comment;
 import penterest.spring.domain.comment.service.CommentService;
-import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.domain.gif.service.GifService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/comment")
@@ -44,6 +45,12 @@ public class CommentController {
     @DeleteMapping("/delete/{commentId}")
     public void delete(@PathVariable("commentId") Long commentId) throws Exception {
         commentService.remove(commentId);
+    }
+
+    @GetMapping("/commentListByWriter/{email}")
+    public ResponseEntity<List<Comment>> getCommentByWriterEmail(@PathVariable String email) {
+        List<Comment> commentList = commentService.findCommentListByMemberEmail(email);
+        return ResponseEntity.ok(commentList);
     }
 
 }

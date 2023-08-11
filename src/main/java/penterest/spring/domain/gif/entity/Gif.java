@@ -2,12 +2,10 @@ package penterest.spring.domain.gif.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import penterest.spring.domain.comment.entity.Comment;
-import penterest.spring.domain.gif.dto.BriefGifInfo;
-import penterest.spring.domain.member.entity.Authority;
+
 import penterest.spring.domain.member.entity.Member;
 import penterest.spring.domain.member.repository.MemberRepository;
 import penterest.spring.global.domain.BaseTimeEntity;

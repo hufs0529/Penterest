@@ -63,4 +63,6 @@ public class GifSearchQueryRepository {
                 .map(SearchHit::getContent)
                 .collect(Collectors.toList());
     }
+
+    //public List<GifDocument> findByMatchesComment(Strin)
 }

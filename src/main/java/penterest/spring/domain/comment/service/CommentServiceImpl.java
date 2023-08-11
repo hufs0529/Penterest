@@ -91,4 +91,9 @@ public class CommentServiceImpl implements  CommentService{
         commentRepository.deleteAll(removableCommentList);
     }
 
+    @Override
+    public List<Comment> findCommentListByMemberEmail(String email) {
+        return commentRepository.findCommentListByMemberEmail(email);
+    }
+
 }

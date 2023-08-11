@@ -31,4 +31,7 @@ public interface GifService {
     void migrateGifInfoDtosToElasticsearch();
 
     List<GifDocument> searchByCaption(String caption);
+
+    List<Gif> getGifListByMemberEmail(String email);
+
 }

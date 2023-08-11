@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import penterest.spring.domain.comment.entity.Comment;
+import penterest.spring.domain.comment.repository.CommentRepository;
 import penterest.spring.domain.gif.converter.GifInfoDtoToGifDocumentConverter;
 import penterest.spring.domain.gif.dto.BriefGifInfo;
 import penterest.spring.domain.gif.dto.GifInfoDto;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GifServiceImpl implements  GifService{
 
+    private final CommentRepository commentRepository;
     private final GifRepository gifRepository;
     private final MemberRepository memberRepository;
     private final GifSearchQueryRepository gifSearchQueryRepository;
@@ -138,4 +141,10 @@ public class GifServiceImpl implements  GifService{
     public List<GifDocument> searchByCaption(String caption) {
         return gifSearchQueryRepository.findByMatchesCaption(caption);
     }
+
+    @Override
+    public List<Gif> getGifListByMemberEmail(String email) {
+        return gifRepository.findGifListByMemberEmail(email);
+    }
+
 }

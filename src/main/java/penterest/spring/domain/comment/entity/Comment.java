@@ -31,6 +31,7 @@ public class Comment extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id")
+    @JsonBackReference
     private Member writer;
 
     @ManyToOne(fetch = FetchType.LAZY)

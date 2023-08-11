@@ -21,9 +21,8 @@ public interface GifRepository extends JpaRepository<Gif, Long> {
     @Query("SELECT g.writer.email FROM Gif g WHERE g.id = :gifId")
     String findWriterEmailByGifId(Long gifId);
 
-//    @Query("SELECT new penterest.spring.domain.gif.dto.GifInfoByEmailDto(g.gifId, g.url, g.caption) " +
-//            "FROM Gif g " +
-//            "JOIN g.writer m " +
-//            "WHERE m.email = :email")
-//    List<GifInfoByEmailDto> findGifsByEmail(@Param("email") String email);
+    // member의 email을 이용하여 해당 member의 gifList 조회
+    @Query("SELECT m.gifList FROM Member m WHERE m.email = :email")
+    List<Gif> findGifListByMemberEmail(String email);
+
 }

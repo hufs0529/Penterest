@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @NoArgsConstructor
-
 public class CustomUserDetails implements UserDetails {
 
     private Member member;

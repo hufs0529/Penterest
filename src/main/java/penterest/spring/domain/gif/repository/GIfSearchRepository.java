@@ -8,4 +8,6 @@ import java.util.List;
 public interface GIfSearchRepository extends ElasticsearchRepository<GifDocument, Long> {
 
     List<GifDocument> findByCaption(String caption);
+
+
 }

@@ -64,8 +64,16 @@ public class GifController {
     }
 
     @GetMapping("/search/{caption}")
-    public ResponseEntity<List<GifDocument>> searchByCaption(@PathVariable  String caption) {
+    public ResponseEntity<List<GifDocument>> searchByCaption(@PathVariable String caption) {
         List<GifDocument> gifs = gifService.searchByCaption(caption);
         return ResponseEntity.ok(gifs);
     }
+
+    @GetMapping("/gifListByWriter/{email}")
+    public ResponseEntity<List<Gif>> getGifByWriterEmail(@PathVariable String email) {
+        List<Gif> gifList = gifService.getGifListByMemberEmail(email);
+        return ResponseEntity.ok(gifList);
+    }
+
+
 }
