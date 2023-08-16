@@ -26,5 +26,6 @@ public interface GifRepository extends JpaRepository<Gif, Long> {
     @Query("SELECT m.gifList FROM Member m WHERE m.email = :email")
     List<Gif> findGifListByMemberEmail(String email);
 
-    //Gif findById(Long id);
+    @Query("SELECT g FROM Gif g WHERE g.id = :id")
+    Gif findGifById(Long id);
 }

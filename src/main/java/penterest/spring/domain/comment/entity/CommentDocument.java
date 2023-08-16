@@ -10,6 +10,7 @@ import penterest.spring.domain.gif.entity.GifDocument;
 import penterest.spring.global.domain.BaseTimeEntity;
 
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -22,18 +23,26 @@ public class CommentDocument extends BaseTimeEntity {
 
     @Id
     @Field(type = FieldType.Keyword)
-    private Long id;
+    private String id;
 
     @Field(type = FieldType.Text)
     private String content;
 
-    @Field(type = FieldType.Text)
-    private Long gifId;
+    @Field(type = FieldType.Long)
+    private Long gif_id;
+
+    @Field(type = FieldType.Date)
+    private LocalDateTime createdDate;
+
+    @Field(type = FieldType.Date)
+    private LocalDateTime modifiedDate;
     public static CommentDocument from(Comment comment) {
         return CommentDocument.builder()
-                .id(comment.getId())
+                .id(String.valueOf(comment.getId()))
                 .content(comment.getContent())
-                .gifId(comment.getGif().getId())
+                .gif_id(comment.getGif().getId())
+                .createdDate(comment.getCreatedDate())
+                .modifiedDate(comment.getModifiedDate())
                 .build();
     }
 

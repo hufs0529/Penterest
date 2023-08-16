@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import penterest.spring.domain.comment.dto.CommentESDto;
 import penterest.spring.domain.comment.entity.CommentDocument;
 import penterest.spring.domain.comment.repository.CommentRepository;
+import penterest.spring.domain.gif.dto.GitESDto;
 import penterest.spring.domain.gif.dto.SearchCondition;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.domain.gif.entity.GifDocument;
@@ -63,26 +64,20 @@ public class GifSearchQueryRepository {
         Criteria criteria = Criteria.where("content").matches(content);
         Query query = new CriteriaQuery(criteria);
         SearchHits<CommentDocument> searchHits = operations.search(query, CommentDocument.class);
+
         return searchHits.stream()
                 .map(hit -> {
-                    CommentESDto dto = CommentESDto.fromCommentDocument(hit.getContent());
-
-                    Optional<Gif> gif = gifRepository.findById(dto.getGif().getId());
-                    if (gif.isPresent()) {
-                        Gif gifValue = gif.get();
-                        dto.getGif().setId(gifValue.getId());
-                        dto.getGif().setUrl(gifValue.getUrl());
-                        dto.getGif().setCaption(gifValue.getCaption());
-                    } else {
-                        // 원하는 처리를 하거나 예외를 던지는 등의 방식으로 값이 없을 때 처리합니다.
-                        // 예: dto.getGif().setId(null);
-                        //     dto.getGif().setUrl("No URL available");
-                        //     dto.getGif().setCaption("No caption available");
+                    CommentDocument commentDocument = hit.getContent();
+                    Long gifId = commentDocument.getGif_id();
+                    Gif gif = null;
+                    if (gifId != null) {
+                        gif = gifRepository.findGifById(gifId);
                     }
-                    return dto;
+                    return CommentESDto.fromCommentDocument(commentDocument, gif);
                 })
                 .collect(Collectors.toList());
     }
+
 
 //    public List<Comment> findCommentsByContentContaining(String content) {
 //        Criteria criteria = Criteria.where("caption").matches(content);

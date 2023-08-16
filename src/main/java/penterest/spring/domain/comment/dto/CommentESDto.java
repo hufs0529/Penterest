@@ -1,27 +1,34 @@
 package penterest.spring.domain.comment.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import penterest.spring.domain.comment.entity.CommentDocument;
 import penterest.spring.domain.gif.dto.GitESDto;
+import penterest.spring.domain.gif.entity.Gif;
+import penterest.spring.domain.gif.repository.GifRepository;
 
 @Setter
 @Getter
 public class CommentESDto {
 
-    private Long id;
-    private String content;
-    private GitESDto gif;
+    @Autowired
+    private GifRepository gifRepository;
 
-    public static CommentESDto fromCommentDocument(CommentDocument commentDocument) {
+    private String id;
+    private String content;
+    private GitESDto gifDto;
+
+
+    public static CommentESDto fromCommentDocument(CommentDocument commentDocument, Gif gif) {
         CommentESDto dto = new CommentESDto();
         dto.setId(commentDocument.getId());
         dto.setContent(commentDocument.getContent());
 
-        GitESDto gifDTO = new GitESDto();
-        gifDTO.setId(commentDocument.getGifId()); // 이 부분을 commentDocument의 gifId에서 실제 Gif 객체로 변환하는 로직으로 수정
-        dto.setGif(gifDTO);
-
+        Long gifId = commentDocument.getGif_id();
+        if (gifId != null && gif != null) {
+            GitESDto gifDTO = GitESDto.fromGif(gif);
+            dto.setGifDto(gifDTO);
+        }
         return dto;
     }
 }

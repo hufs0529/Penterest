@@ -4,21 +4,33 @@ spring:
       cluster-name: my-cluster
       cluster-nodes: localhost:9200
 
-  h2:
-    console.enabled: true
+#  h2:
+#    console.enabled: true
 
+#  datasource:
+#    url: jdbc:h2:mem:testdb
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#    initialization-mode: always
+
+#  jpa:
+#    defer-datasource-initialization: true
+#    hibernate:
+#      ddl-auto: create
+#    show-sql: true
   datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-    initialization-mode: always
-
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/penterest?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
+    password: Abcd123@
   jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create
-    show-sql: true
+      ddl-auto: update
+      show-sql: true
 
 jwt:
   header: Authorization

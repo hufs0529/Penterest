@@ -12,7 +12,7 @@ public class GifInfoDtoToGifDocumentConverter implements Converter<Gif, GifDocum
     @Override
     public GifDocument convert(Gif gif) {
         GifDocument gifDocument = new GifDocument();
-        gifDocument.setId(gif.getId());
+        gifDocument.setId(String.valueOf(gif.getId()));
         gifDocument.setUrl(gif.getUrl());
         gifDocument.setCaption(gif.getCaption());
 

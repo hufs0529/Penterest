@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import penterest.spring.domain.comment.dto.CommentInfoDto;
 import penterest.spring.domain.comment.entity.Comment;
 import penterest.spring.domain.gif.entity.Gif;
+import penterest.spring.domain.gif.entity.GifDocument;
 import penterest.spring.domain.member.dto.MemberInfoDto;
 
 import java.util.List;

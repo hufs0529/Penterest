@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import penterest.spring.domain.gif.entity.Gif;
 
+import java.util.Optional;
+
 @Getter
 @Setter
 public class GitESDto {

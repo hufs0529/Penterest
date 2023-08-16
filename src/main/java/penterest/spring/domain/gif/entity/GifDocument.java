@@ -12,7 +12,9 @@ import penterest.spring.global.domain.BaseTimeEntity;
 
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -25,7 +27,10 @@ public class GifDocument extends BaseTimeEntity {
 
     @Id
     @Field(type = FieldType.Keyword)
-    private Long id;
+    private String id;
+
+    @Field(type = FieldType.Long)
+    private Long gif_id;
 
     @Lob
     @Field(type = FieldType.Text)
@@ -34,11 +39,19 @@ public class GifDocument extends BaseTimeEntity {
     @Field(type = FieldType.Text)
     private String url;
 
+    @Field(type = FieldType.Date)
+    private LocalDateTime createdDate;
+
+    @Field(type = FieldType.Date)
+    private LocalDateTime modifiedDate;
+
     public static GifDocument from(Gif gif) {
         return GifDocument.builder()
-                .id(gif.getId())
+                .gif_id(gif.getId())
                 .url(gif.getUrl())
                 .caption(gif.getCaption())
+                .createdDate(gif.getCreatedDate())
+                .modifiedDate(gif.getModifiedDate())
                 .build();
     }
 
