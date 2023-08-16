@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import penterest.spring.domain.gif.dto.BriefGifInfo;
+import penterest.spring.domain.comment.dto.CommentESDto;
 import penterest.spring.domain.gif.dto.GifSaveDto;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.domain.gif.entity.GifDocument;
@@ -63,17 +63,21 @@ public class GifController {
         return ResponseEntity.ok("Migration completed.");
     }
 
-    @GetMapping("/search/{caption}")
-    public ResponseEntity<List<GifDocument>> searchByCaption(@PathVariable String caption) {
-        List<GifDocument> gifs = gifService.searchByCaption(caption);
-        return ResponseEntity.ok(gifs);
-    }
-
     @GetMapping("/gifListByWriter/{email}")
     public ResponseEntity<List<Gif>> getGifByWriterEmail(@PathVariable String email) {
         List<Gif> gifList = gifService.getGifListByMemberEmail(email);
         return ResponseEntity.ok(gifList);
     }
 
+    @GetMapping("/searchByCaption/{caption}")
+    public ResponseEntity<List<GifDocument>> searchByCaption(@PathVariable String caption) {
+        List<GifDocument> gifs = gifService.searchByCaption(caption);
+        return ResponseEntity.ok(gifs);
+    }
 
+    @GetMapping("/searchByComment/{comment}")
+    public ResponseEntity<List<CommentESDto>> searchByComment(@PathVariable String comment) {
+        List<CommentESDto> commentDocumentList = gifService.searchByComment(comment);
+        return ResponseEntity.ok(commentDocumentList);
+    }
 }

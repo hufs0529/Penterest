@@ -21,7 +21,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(indexName = "gif_index")
-
 public class GifDocument extends BaseTimeEntity {
 
     @Id

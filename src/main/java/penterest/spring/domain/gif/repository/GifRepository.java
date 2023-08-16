@@ -1,5 +1,6 @@
 package penterest.spring.domain.gif.repository;
 
+import antlr.collections.impl.LList;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +26,5 @@ public interface GifRepository extends JpaRepository<Gif, Long> {
     @Query("SELECT m.gifList FROM Member m WHERE m.email = :email")
     List<Gif> findGifListByMemberEmail(String email);
 
+    //Gif findById(Long id);
 }

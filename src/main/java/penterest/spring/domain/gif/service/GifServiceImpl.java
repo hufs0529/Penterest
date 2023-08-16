@@ -3,10 +3,9 @@ package penterest.spring.domain.gif.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import penterest.spring.domain.comment.entity.Comment;
+import penterest.spring.domain.comment.dto.CommentESDto;
 import penterest.spring.domain.comment.repository.CommentRepository;
 import penterest.spring.domain.gif.converter.GifInfoDtoToGifDocumentConverter;
 import penterest.spring.domain.gif.dto.BriefGifInfo;
@@ -127,6 +126,11 @@ public class GifServiceImpl implements  GifService{
     }
 
     @Override
+    public List<CommentESDto> searchByComment(String content) {
+        return gifSearchQueryRepository.searchCommentsByContent(content);
+    }
+
+    @Override
     public void migrateGifInfoDtosToElasticsearch() {
         List<Gif> gifs = gifRepository.findAll();
 
@@ -146,5 +150,4 @@ public class GifServiceImpl implements  GifService{
     public List<Gif> getGifListByMemberEmail(String email) {
         return gifRepository.findGifListByMemberEmail(email);
     }
-
 }

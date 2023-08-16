@@ -34,7 +34,6 @@ public class BriefGifInfo {
         briefGifInfo.setGifId(gifDocument.getId());
         briefGifInfo.setCaption(gifDocument.getCaption());
         briefGifInfo.setUrl(gifDocument.getUrl());
-        // Set other fields as needed.
         return briefGifInfo;
     }
 }

@@ -1,8 +1,7 @@
 package penterest.spring.domain.gif.service;
 
-import penterest.spring.domain.comment.entity.Comment;
+import penterest.spring.domain.comment.dto.CommentESDto;
 import penterest.spring.domain.gif.dto.BriefGifInfo;
-import penterest.spring.domain.gif.dto.GifInfoByEmailDto;
 import penterest.spring.domain.gif.dto.GifInfoDto;
 import penterest.spring.domain.gif.dto.GifSaveDto;
 import penterest.spring.domain.gif.entity.Gif;
@@ -33,5 +32,7 @@ public interface GifService {
     List<GifDocument> searchByCaption(String caption);
 
     List<Gif> getGifListByMemberEmail(String email);
+
+    List<CommentESDto> searchByComment(String content);
 
 }
