@@ -80,7 +80,7 @@ public class test {
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
 
         // Act
-        ResponseEntity<TokenDto> response = authController.authorize(loginDto);
+        ResponseEntity<TokenDto> response = authController.authenticateAndGenerateToken(loginDto);
 
         // Assert
         // Verify the response

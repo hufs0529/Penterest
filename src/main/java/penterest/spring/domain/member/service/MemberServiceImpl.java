@@ -4,19 +4,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import penterest.spring.domain.gif.dto.GifInfoDto;
-import penterest.spring.domain.member.dto.MemberGifDto;
-import penterest.spring.domain.member.dto.MemberInfoDto;
-import penterest.spring.domain.member.dto.MemberSignUpDto;
-import penterest.spring.domain.member.dto.TokenDto;
+import penterest.spring.domain.member.dto.*;
 import penterest.spring.domain.member.entity.Authority;
 import penterest.spring.domain.member.entity.Member;
 import penterest.spring.domain.member.entity.RefreshToken;
 import penterest.spring.domain.member.repository.MemberRepository;
 import penterest.spring.domain.member.repository.RefreshTokenRepository;
+import penterest.spring.global.exception.DuplicateEmailException;
+import penterest.spring.global.exception.ValidationException;
 import penterest.spring.global.jwt.TokenProvider;
 import penterest.spring.global.security.util.SecurityUtil;
 
@@ -29,35 +29,32 @@ import java.util.stream.Collectors;
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-
-
-//    public Member getOrCreateDefaultMember() {
-//        String defaultEmail = "default@example.com";
-//        Member existingMember = memberRepository.findByEmail(defaultEmail);
-//
-//        if (existingMember != null) {
-//            return existingMember;
-//        } else {
-//            Member newMember = new Member();
-//            newMember.setEmail(defaultEmail);
-//            newMember.setPassword("default1234!");
-//            newMember.setAuthorities();
-//            return memberRepository.save(newMember);
-//        }
-//    }
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final TokenProvider tokenProvider;
 
     @Override
     @Transactional
-    public void signUp(MemberSignUpDto memberSignUpDto) throws Exception {
-        Member member = memberSignUpDto.toEntity();
+    public void signUp(MemberSignUpDto memberRequestDto) throws ValidationException, DuplicateEmailException {
+        Member member = memberRequestDto.toEntity();
 
         member.encodePassword(passwordEncoder);
 
-        if (memberRepository.existsByEmail(memberSignUpDto.getEmail())) {
-            throw new Exception();
+        if (memberRepository.existsByEmail(memberRequestDto.getEmail())) {
+            throw new DuplicateEmailException("Email already exists");
         }
         memberRepository.save(member);
+    }
 
+    public TokenDto authenticateAndGenerateToken(LoginDto memberRequestDto) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(memberRequestDto.getEmail(), memberRequestDto.getPassword());
+
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String jwt = tokenProvider.generateToken(authentication);
+
+        return new TokenDto(jwt,"");
     }
 
     @Override

@@ -19,7 +19,7 @@ public class FollowService {
     private final FollowRepository followRepository;
     private final MemberRepository memberRepository;
 
-    public Boolean addFollow(String toAccount, String fromAccount) throws Exception {
+    public String addFollow(String toAccount, String fromAccount) throws Exception {
         if(Objects.equals(toAccount, fromAccount)) {
             throw new Exception();
         }
@@ -34,10 +34,10 @@ public class FollowService {
         }
         followRepository.save(new Follow(toMember.getEmail(), fromMember.getEmail()));
 
-        return true;
+        return fromAccount + " 가 " + toAccount + "를 팔로우하기 시작했습니다";
     }
 
-    public Boolean unFollow(String toAccount, String fromAccount) throws Exception {
+    public String unFollow(String toAccount, String fromAccount) throws Exception {
         if(Objects.equals(toAccount, fromAccount)) {
             throw new Exception();
         }
@@ -51,7 +51,7 @@ public class FollowService {
         }
         followRepository.delete(relation.get());
 
-        return true;
+        return fromAccount + " 가 " + toAccount + "를 팔로우를 취소했습니다";
     }
     private Optional<Follow> getFollowRelation(String toAccount, String fromAccount) {
         return followRepository.findByToMemberAndFromMember(toAccount, fromAccount);

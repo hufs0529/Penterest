@@ -5,6 +5,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import penterest.spring.domain.Like.dto.LikedGifDto;
+import penterest.spring.domain.Like.entity.Like;
+import penterest.spring.domain.Like.repository.LikeRepository;
 import penterest.spring.domain.comment.dto.CommentESDto;
 import penterest.spring.domain.comment.repository.CommentRepository;
 import penterest.spring.domain.gif.converter.GifInfoDtoToGifDocumentConverter;
@@ -28,6 +31,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GifServiceImpl implements  GifService{
 
+    private final LikeRepository likeRepository;
     private final CommentRepository commentRepository;
     private final GifRepository gifRepository;
     private final MemberRepository memberRepository;
@@ -36,26 +40,8 @@ public class GifServiceImpl implements  GifService{
     private final GifInfoDtoToGifDocumentConverter converter;
 
 
-
-//    @Override
-//    public void save(GifSaveDto gifSaveDto) {
-//        Gif gif = gifSaveDto.toEntity();
-//        Member defaultMember = memberRepository.findByEmail("user@example.com");
-//
-//        if (checkAuthority(gif)) {
-//            // Gif 엔티티를 저장하기 전에 Member 엔티티를 먼저 저장해야 합니다.
-//            Member member = memberRepository.findByEmail(gif.getWriter().getEmail());
-//            member.encodePassword(passwordEncoder);
-//            gif.confirmWriter(memberRepository, member); // memberRepository를 인자로 전달
-//        } else {
-//            memberRepository.save(defaultMember);
-//            gif.confirmWriter(memberRepository, defaultMember); // memberRepository를 인자로 전달
-//        }
-//        gifRepository.save(gif);
-//    }
-
     @Override
-    public void save(GifSaveDto gifSaveDto) {
+    public Gif save(GifSaveDto gifSaveDto) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String email = ((UserDetails) principal).getUsername();
 
@@ -64,6 +50,7 @@ public class GifServiceImpl implements  GifService{
         gif.confirmWriter(memberRepository, member);
 
         gifRepository.save(gif);
+        return gif;
     }
 
 
@@ -78,7 +65,7 @@ public class GifServiceImpl implements  GifService{
 
 
     @Override
-    public void delete(Long id) throws Exception {
+    public String delete(Long id) throws Exception {
         Gif gif = gifRepository.findById(id).orElseThrow(()->
                 new Exception());
 
@@ -87,6 +74,7 @@ public class GifServiceImpl implements  GifService{
         }else {
             throw new Exception("인가된 유저가 아닙니다");
         }
+        return id + " id의 게시물이 지워졌습니다";
     }
 
 
@@ -131,6 +119,14 @@ public class GifServiceImpl implements  GifService{
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<LikedGifDto> getLikeGifListWithEmail(String email) {
+        List<LikedGifDto> likedGifDTOList = gifRepository.findLikedGifDetailsByEmail(email);
+        return likedGifDTOList;
+    }
+
+
+    @Override
     public void migrateGifInfoDtosToElasticsearch() {
         List<Gif> gifs = gifRepository.findAll();
 
@@ -148,6 +144,7 @@ public class GifServiceImpl implements  GifService{
 
     @Override
     public List<Gif> getGifListByMemberEmail(String email) {
+
         return gifRepository.findGifListByMemberEmail(email);
     }
 }

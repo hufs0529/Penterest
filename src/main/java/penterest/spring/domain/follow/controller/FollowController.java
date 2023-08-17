@@ -19,13 +19,13 @@ public class FollowController {
     private final FollowService followService;
 
     @PostMapping("/follow/{toAccount}/{fromAccount}")
-    public void addFollow(@PathVariable String toAccount, @PathVariable String fromAccount) throws Exception {
-        followService.addFollow(toAccount, fromAccount);
+    public ResponseEntity addFollow(@PathVariable String toAccount, @PathVariable String fromAccount) throws Exception {
+        return ResponseEntity.ok(followService.addFollow(toAccount, fromAccount));
     }
 
     @PostMapping("/unfollow/{toAccount}/{fromAccount}")
-    public void unFollow(@PathVariable String toAccount, @PathVariable String fromAccount) throws Exception {
-        followService.unFollow(toAccount, fromAccount);
+    public ResponseEntity unFollow(@PathVariable String toAccount, @PathVariable String fromAccount) throws Exception {
+        return ResponseEntity.ok(followService.unFollow(toAccount, fromAccount));
     }
 
     @GetMapping("/follower/{account}")

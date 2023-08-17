@@ -1,15 +1,21 @@
 package penterest.spring.domain.gif.controller;
 
+import co.elastic.clients.elasticsearch.nodes.Http;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import penterest.spring.domain.Like.dto.LikedGifDto;
 import penterest.spring.domain.comment.dto.CommentESDto;
 import penterest.spring.domain.gif.dto.GifSaveDto;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.domain.gif.entity.GifDocument;
 import penterest.spring.domain.gif.repository.GifSearchQueryRepository;
 import penterest.spring.domain.gif.service.GifService;
+import penterest.spring.domain.member.controller.MemberController;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -20,15 +26,23 @@ import java.util.List;
 public class GifController {
 
     private final GifService gifService;
-    private final GifSearchQueryRepository gifSearchQueryRepository;
+    private final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
     /**
      * 게시글 저장
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/save")
-    public void save(@Valid @RequestBody GifSaveDto gifSaveDto) throws Exception {
-        gifService.save(gifSaveDto);
+    public ResponseEntity save(@Valid @RequestBody GifSaveDto gifSaveDto) throws Exception {
+        try {
+            Gif gif = gifService.save(gifSaveDto);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("Gif created with ID: " + gif.getId());
+        }catch (MethodArgumentNotValidException ex){
+            logger.warn("Validation failed: {}", ex.getMessage());
+            throw ex;
+        }
     }
 
 
@@ -37,8 +51,8 @@ public class GifController {
      */
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/delete/{gifId}")
-    public void delete(@PathVariable("gifId") Long gifId) throws Exception {
-        gifService.delete(gifId);
+    public ResponseEntity delete(@PathVariable("gifId") Long gifId) throws Exception {
+        return ResponseEntity.ok(gifService.delete(gifId));
     }
 
 
@@ -55,6 +69,13 @@ public class GifController {
     public ResponseEntity<String> getWriterEmailByGifId(@PathVariable("gifId") Long gifId){
         String writerEmail = gifService.findWriterEmailByGifId(gifId);
         return ResponseEntity.ok(writerEmail);
+    }
+
+    //좋아요한 gif 조회
+    @GetMapping("/getWithLike/{email}")
+    public ResponseEntity<List<LikedGifDto>> getLikeGifListWithLike(@PathVariable("email") String email) {
+        List<LikedGifDto> gifList = gifService.getLikeGifListWithEmail(email);
+        return ResponseEntity.ok(gifList);
     }
 
     @PostMapping("/migrate")

@@ -2,6 +2,7 @@ package penterest.spring.domain.member.controller;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,14 +27,16 @@ public class MemberController {
 
     @PutMapping("/password")
     @ResponseStatus(HttpStatus.OK)
-    public void updatePassword(@Valid @RequestBody UpdatePasswordDto updatePasswordDto) throws Exception {
+    public ResponseEntity updatePassword(@Valid @RequestBody UpdatePasswordDto updatePasswordDto) throws Exception {
         memberService.updatePassword(updatePasswordDto.checkPassword(), updatePasswordDto.toBePassword(), SecurityUtil.getLoginUserEmail());
+        return new ResponseEntity(updatePasswordDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
     @ResponseStatus(HttpStatus.OK)
-    public void withdraw(@Valid @RequestBody MemberWithdrawDto memberWithdrawDto) throws Exception {
+    public ResponseEntity withdraw(@Valid @RequestBody MemberWithdrawDto memberWithdrawDto) throws Exception {
         memberService.withdraw(memberWithdrawDto.checkPassword(), SecurityUtil.getLoginUserEmail());
+        return new ResponseEntity(memberWithdrawDto, HttpStatus.OK);
     }
 
     @GetMapping("/search/{id}")

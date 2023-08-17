@@ -1,5 +1,6 @@
 package penterest.spring.domain.gif.service;
 
+import penterest.spring.domain.Like.dto.LikedGifDto;
 import penterest.spring.domain.comment.dto.CommentESDto;
 import penterest.spring.domain.gif.dto.BriefGifInfo;
 import penterest.spring.domain.gif.dto.GifInfoDto;
@@ -12,9 +13,9 @@ import java.util.List;
 
 public interface GifService {
 
-    void save(GifSaveDto gifSaveDto) throws Exception;
+    Gif save(GifSaveDto gifSaveDto) throws Exception;
 
-    void delete(Long id) throws Exception;
+    String delete(Long id) throws Exception;
 
     GifInfoDto getGifInfo(Long id) throws Exception;
 
@@ -35,4 +36,5 @@ public interface GifService {
 
     List<CommentESDto> searchByComment(String content);
 
+    List<LikedGifDto> getLikeGifListWithEmail(String email);
 }

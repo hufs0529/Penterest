@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import penterest.spring.domain.Like.dto.LikedGifDto;
 import penterest.spring.domain.gif.dto.GifInfoByEmailDto;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.domain.comment.entity.Comment;
@@ -28,4 +29,12 @@ public interface GifRepository extends JpaRepository<Gif, Long> {
 
     @Query("SELECT g FROM Gif g WHERE g.id = :id")
     Gif findGifById(Long id);
+
+    @Query("SELECT NEW penterest.spring.domain.Like.dto.LikedGifDto(g.id, g.caption, g.url) " +
+            "FROM Like l " +
+            "JOIN l.gif g " +
+            "JOIN l.member m " +
+            "WHERE m.email = :email")
+    List<LikedGifDto> findLikedGifDetailsByEmail(@Param("email") String email);
+
 }

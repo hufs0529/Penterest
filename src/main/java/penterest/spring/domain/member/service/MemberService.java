@@ -4,9 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import penterest.spring.domain.member.dto.MemberGifDto;
-import penterest.spring.domain.member.dto.MemberInfoDto;
-import penterest.spring.domain.member.dto.MemberSignUpDto;
+import penterest.spring.domain.member.dto.*;
 
 import java.util.List;
 
@@ -23,4 +21,6 @@ public interface MemberService {
     MemberInfoDto getMyInfo() throws Exception;
 
     List<MemberGifDto> getGifInfoByEmail(String email) throws Exception;
+
+    TokenDto authenticateAndGenerateToken(LoginDto loginDto);
 }
