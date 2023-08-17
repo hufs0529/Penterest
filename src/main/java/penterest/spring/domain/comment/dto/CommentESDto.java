@@ -3,7 +3,7 @@ package penterest.spring.domain.comment.dto;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import penterest.spring.domain.comment.entity.CommentDocument;
-import penterest.spring.domain.gif.dto.GitESDto;
+import penterest.spring.domain.gif.dto.GifESDto;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.domain.gif.repository.GifRepository;
 
@@ -11,12 +11,9 @@ import penterest.spring.domain.gif.repository.GifRepository;
 @Getter
 public class CommentESDto {
 
-    @Autowired
-    private GifRepository gifRepository;
-
     private String id;
     private String content;
-    private GitESDto gifDto;
+    private GifESDto gifDto;
 
 
     public static CommentESDto fromCommentDocument(CommentDocument commentDocument, Gif gif) {
@@ -26,7 +23,7 @@ public class CommentESDto {
 
         Long gifId = commentDocument.getGif_id();
         if (gifId != null && gif != null) {
-            GitESDto gifDTO = GitESDto.fromGif(gif);
+            GifESDto gifDTO = GifESDto.fromGif(gif);
             dto.setGifDto(gifDTO);
         }
         return dto;

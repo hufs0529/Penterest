@@ -4,6 +4,8 @@ import co.elastic.clients.elasticsearch.nodes.Http;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import penterest.spring.domain.Like.dto.LikedGifDto;
 import penterest.spring.domain.comment.dto.CommentESDto;
 import penterest.spring.domain.gif.dto.GifSaveDto;
+import penterest.spring.domain.gif.dto.GifSearchCondition;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.domain.gif.entity.GifDocument;
 import penterest.spring.domain.gif.repository.GifSearchQueryRepository;
@@ -18,6 +21,7 @@ import penterest.spring.domain.gif.service.GifService;
 import penterest.spring.domain.member.controller.MemberController;
 
 import javax.validation.Valid;
+import java.awt.print.Pageable;
 import java.util.List;
 
 @RestController
@@ -64,7 +68,21 @@ public class GifController {
         return ResponseEntity.ok(gifService.getGifInfo(gifId));
     }
 
-    // elasticsearch 적용시 writer에 입력시 gif 나올수 있도록
+    /**
+     * 조건에 맞는 게시글 리스트
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/search")
+    public ResponseEntity search(
+            @RequestParam(value = "sort", defaultValue = "createDate") String sort,
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "5") Integer size,
+            @ModelAttribute GifSearchCondition gifSearchCondition) {
+        PageRequest pageable = PageRequest.of(page - 1, size, Sort.by(sort).ascending());
+        return ResponseEntity.ok(gifService.getGifList(pageable, gifSearchCondition));
+    }
+
+    // gif id 입력시 작성자 노출
     @GetMapping("/getWriter/{gifId}")
     public ResponseEntity<String> getWriterEmailByGifId(@PathVariable("gifId") Long gifId){
         String writerEmail = gifService.findWriterEmailByGifId(gifId);
@@ -78,24 +96,27 @@ public class GifController {
         return ResponseEntity.ok(gifList);
     }
 
-    @PostMapping("/migrate")
-    public ResponseEntity<String> migrateGifInfoDtosToElasticsearch() {
-        gifService.migrateGifInfoDtosToElasticsearch();
-        return ResponseEntity.ok("Migration completed.");
-    }
+//    @PostMapping("/migrate")
+//    public ResponseEntity<String> migrateGifInfoDtosToElasticsearch() {
+//        gifService.migrateGifInfoDtosToElasticsearch();
+//        return ResponseEntity.ok("Migration completed.");
+//    }
 
+    // email 입력시 email이 작성한 gif list반환
     @GetMapping("/gifListByWriter/{email}")
     public ResponseEntity<List<Gif>> getGifByWriterEmail(@PathVariable String email) {
         List<Gif> gifList = gifService.getGifListByMemberEmail(email);
         return ResponseEntity.ok(gifList);
     }
 
+    // es에 gif 설명 입력시 해당 gif list반환
     @GetMapping("/searchByCaption/{caption}")
     public ResponseEntity<List<GifDocument>> searchByCaption(@PathVariable String caption) {
         List<GifDocument> gifs = gifService.searchByCaption(caption);
         return ResponseEntity.ok(gifs);
     }
 
+    // es에 gif 댓글 입력히 해당 gif list 반환
     @GetMapping("/searchByComment/{comment}")
     public ResponseEntity<List<CommentESDto>> searchByComment(@PathVariable String comment) {
         List<CommentESDto> commentDocumentList = gifService.searchByComment(comment);

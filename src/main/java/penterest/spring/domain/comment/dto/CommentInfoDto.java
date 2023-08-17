@@ -17,7 +17,7 @@ public class CommentInfoDto {
     private String content;
     private boolean isRemoved;
 
-    private MemberInfoDto writerDto;
+    private String email;
 
     private List<ReCommentInfoDto> reCommentInfoDtoList; //대댓글 정보
 
@@ -32,7 +32,7 @@ public class CommentInfoDto {
         }
 
         this.isRemoved = comment.isRemoved();
-        this.writerDto = new MemberInfoDto(comment.getWriter());
+        this.email = comment.getWriter().getEmail();
 
         this.reCommentInfoDtoList = reCommentList.stream().map(ReCommentInfoDto::new).toList();
     }

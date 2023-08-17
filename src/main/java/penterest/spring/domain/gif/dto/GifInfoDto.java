@@ -8,6 +8,7 @@ import penterest.spring.domain.comment.entity.Comment;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.domain.gif.entity.GifDocument;
 import penterest.spring.domain.member.dto.MemberInfoDto;
+import penterest.spring.domain.member.entity.Member;
 
 import java.util.List;
 import java.util.Map;
@@ -22,8 +23,7 @@ public class GifInfoDto {
     private String caption;
 
     //@JsonIgnoreProperties({"email", "password", "authority"}) // MemberInfoDto 클래스의 firstName, lastName 프로퍼티는 무시하도록 설정
-    private MemberInfoDto memberInfoDto;
-
+    private String email;
     private List<CommentInfoDto> commentInfoDtoList;
 
     public GifInfoDto(Gif gif) {
@@ -31,7 +31,7 @@ public class GifInfoDto {
         this.url = gif.getUrl();
         this.caption = gif.getCaption();
 
-        this.memberInfoDto = new MemberInfoDto(gif.getWriter());
+        this.email = gif.getWriter().getEmail();
 
 
         /**

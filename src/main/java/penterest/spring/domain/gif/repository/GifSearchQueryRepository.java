@@ -12,12 +12,10 @@ import org.springframework.stereotype.Repository;
 import penterest.spring.domain.comment.dto.CommentESDto;
 import penterest.spring.domain.comment.entity.CommentDocument;
 import penterest.spring.domain.comment.repository.CommentRepository;
-import penterest.spring.domain.gif.dto.GitESDto;
 import penterest.spring.domain.gif.dto.SearchCondition;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.domain.gif.entity.GifDocument;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 

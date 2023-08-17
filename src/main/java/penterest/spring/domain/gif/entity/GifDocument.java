@@ -39,19 +39,11 @@ public class GifDocument extends BaseTimeEntity {
     @Field(type = FieldType.Text)
     private String url;
 
-    @Field(type = FieldType.Date)
-    private LocalDateTime createdDate;
-
-    @Field(type = FieldType.Date)
-    private LocalDateTime modifiedDate;
-
     public static GifDocument from(Gif gif) {
         return GifDocument.builder()
                 .gif_id(gif.getId())
                 .url(gif.getUrl())
                 .caption(gif.getCaption())
-                .createdDate(gif.getCreatedDate())
-                .modifiedDate(gif.getModifiedDate())
                 .build();
     }
 

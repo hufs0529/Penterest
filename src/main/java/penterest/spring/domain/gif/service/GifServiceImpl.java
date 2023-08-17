@@ -1,21 +1,21 @@
 package penterest.spring.domain.gif.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import penterest.spring.domain.Like.dto.LikedGifDto;
-import penterest.spring.domain.Like.entity.Like;
 import penterest.spring.domain.Like.repository.LikeRepository;
 import penterest.spring.domain.comment.dto.CommentESDto;
 import penterest.spring.domain.comment.repository.CommentRepository;
 import penterest.spring.domain.gif.converter.GifInfoDtoToGifDocumentConverter;
-import penterest.spring.domain.gif.dto.BriefGifInfo;
-import penterest.spring.domain.gif.dto.GifInfoDto;
-import penterest.spring.domain.gif.dto.GifSaveDto;
+import penterest.spring.domain.gif.dto.*;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.domain.gif.entity.GifDocument;
+import penterest.spring.domain.gif.repository.CustomGifRepository;
 import penterest.spring.domain.gif.repository.GIfSearchRepository;
 import penterest.spring.domain.gif.repository.GifRepository;
 import penterest.spring.domain.gif.repository.GifSearchQueryRepository;
@@ -38,6 +38,7 @@ public class GifServiceImpl implements  GifService{
     private final GifSearchQueryRepository gifSearchQueryRepository;
     private final GIfSearchRepository gIfSearchRepository;
     private final GifInfoDtoToGifDocumentConverter converter;
+    private final CustomGifRepository customGifRepository;
 
 
     @Override
@@ -123,6 +124,11 @@ public class GifServiceImpl implements  GifService{
     public List<LikedGifDto> getLikeGifListWithEmail(String email) {
         List<LikedGifDto> likedGifDTOList = gifRepository.findLikedGifDetailsByEmail(email);
         return likedGifDTOList;
+    }
+
+    @Override
+    public GifPagingDto getGifList(Pageable pageable, GifSearchCondition gifSearchCondition) {
+        return new GifPagingDto(customGifRepository.search(gifSearchCondition, pageable));
     }
 
 

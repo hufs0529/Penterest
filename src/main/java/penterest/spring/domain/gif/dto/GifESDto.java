@@ -4,18 +4,16 @@ import lombok.Getter;
 import lombok.Setter;
 import penterest.spring.domain.gif.entity.Gif;
 
-import java.util.Optional;
-
 @Getter
 @Setter
-public class GitESDto {
+public class GifESDto {
 
     private Long id;
     private String url;
     private String caption;
 
-    public static GitESDto fromGif(Gif gif) {
-        GitESDto dto = new GitESDto();
+    public static GifESDto fromGif(Gif gif) {
+        GifESDto dto = new GifESDto();
         dto.setId(gif.getId());
         dto.setUrl(gif.getUrl());
         dto.setCaption(gif.getCaption());

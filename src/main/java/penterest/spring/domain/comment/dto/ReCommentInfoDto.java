@@ -18,7 +18,7 @@ public class ReCommentInfoDto {
     private boolean isRemoved;
 
 
-    private MemberInfoDto writerDto;
+    private String email;
 
     public ReCommentInfoDto(Comment reComment) {
         this.gifId = reComment.getGif().getId();
@@ -31,7 +31,7 @@ public class ReCommentInfoDto {
         }
 
         this.isRemoved = reComment.isRemoved();
-        this.writerDto = new MemberInfoDto(reComment.getWriter());
+        this.email = reComment.getWriter().getEmail();
 
     }
 }

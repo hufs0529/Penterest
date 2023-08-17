@@ -38,13 +38,4 @@ public class SecurityUtil {
         return email;
     }
 
-//    public static String getLoginUserEmail(){
-//
-//
-//        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//
-//        return user.getUsername();
-//    }
-
-
 }
