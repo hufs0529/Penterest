@@ -5,7 +5,6 @@ import io
 import numpy as np
 
 s3 = AWSs3.s3_connection()
-#gif_path = "https://penterest.s3.ap-northeast-2.amazonaws.com/gifs/"
 
 def make(title, start, end, speed):
   gs = 1.6
@@ -31,4 +30,4 @@ def make(title, start, end, speed):
       ContentType='image/gif',
     )
   
-make('hi', 0, 5, 1.4)
+# make('hi', 0, 5, 1.4)
