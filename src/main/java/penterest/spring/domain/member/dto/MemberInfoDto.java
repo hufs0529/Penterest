@@ -6,6 +6,7 @@ import penterest.spring.domain.comment.entity.Comment;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.domain.member.entity.Authority;
 import penterest.spring.domain.member.entity.Member;
+import penterest.spring.domain.member.entity.Role;
 
 import java.util.List;
 import java.util.Set;
@@ -15,16 +16,12 @@ public class MemberInfoDto {
 
     private String email;
     private String password;
-//    private List<Gif> gifList;
-//    private List<Comment> commentList;
-    private Set<Authority> authorityDtoSet;
+    private Role role;
 
     @Builder
     public MemberInfoDto(Member member) {
         this.email = member.getEmail();
         this.password = member.getPassword();
-        this.authorityDtoSet = member.getAuthorities();
-//        this.gifList = member.getGifList();
-//        this.commentList = member.getCommentList();
+        this.role = member.getRole();
     }
 }

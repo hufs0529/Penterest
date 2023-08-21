@@ -11,6 +11,7 @@ import penterest.spring.domain.Like.repository.LikeRepository;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.domain.gif.repository.GifRepository;
 import penterest.spring.domain.member.entity.Member;
+import penterest.spring.domain.member.entity.Role;
 import penterest.spring.domain.member.repository.MemberRepository;
 
 @Service
@@ -26,8 +27,8 @@ public class LikeService {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String email = ((UserDetails) principal).getUsername();
 
-        String writer = gif.getWriter().getEmail();
-        return writer;
+        //String writer = gif.getWriter().getEmail();
+        return email;
     }
 
     @Transactional
@@ -38,7 +39,7 @@ public class LikeService {
         Gif gif = gifRepository.findById(likeRequestDto.getGifId())
                 .orElseThrow(()-> new Exception("Could not found gif id : " + likeRequestDto.getGifId()));
 
-        if (member.getEmail() == checkAuthority(gif)){
+        if (member.getEmail().equals(checkAuthority(gif))) {
             Like existingLike = likeRepository.findByMemberAndGif(member, gif);
 
             if (existingLike != null) {
@@ -63,7 +64,7 @@ public class LikeService {
         Gif gif = gifRepository.findById(likeRequestDto.getGifId())
                 .orElseThrow(() -> new Exception("Could not found gif id : " + likeRequestDto.getGifId()));
 
-        if (member.getEmail() == checkAuthority(gif)) {
+        if (member.getEmail().equals(checkAuthority(gif))) {
             Like like = likeRepository.findByMemberAndGif(member, gif);
             likeRepository.delete(like);
         }else {

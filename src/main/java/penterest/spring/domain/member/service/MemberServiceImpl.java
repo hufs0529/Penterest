@@ -8,13 +8,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import penterest.spring.domain.gif.dto.GifInfoDto;
 import penterest.spring.domain.member.dto.*;
-import penterest.spring.domain.member.entity.Authority;
 import penterest.spring.domain.member.entity.Member;
-import penterest.spring.domain.member.entity.RefreshToken;
+import penterest.spring.domain.member.entity.Role;
 import penterest.spring.domain.member.repository.MemberRepository;
-import penterest.spring.domain.member.repository.RefreshTokenRepository;
 import penterest.spring.global.exception.DuplicateEmailException;
 import penterest.spring.global.exception.ValidationException;
 import penterest.spring.global.jwt.TokenProvider;
@@ -37,6 +34,8 @@ public class MemberServiceImpl implements MemberService {
     public void signUp(MemberSignUpDto memberSignUpDto) throws ValidationException, DuplicateEmailException {
         Member member = memberSignUpDto.toEntity();
 
+        member.addUserAuthority();
+
         member.encodePassword(passwordEncoder);
 
         if (memberRepository.existsByEmail(memberSignUpDto.getEmail())) {
@@ -55,6 +54,15 @@ public class MemberServiceImpl implements MemberService {
         String jwt = tokenProvider.generateToken(authentication);
 
         return new TokenDto(jwt,"");
+    }
+
+    @Override
+    public Role updateRole(String email) {
+        Member member = memberRepository.findByEmail(email);
+        if(member.getRole() == Role.ADMIN){
+            member.setRole(Role.ADMIN);
+        }
+        return member.getRole();
     }
 
     @Override

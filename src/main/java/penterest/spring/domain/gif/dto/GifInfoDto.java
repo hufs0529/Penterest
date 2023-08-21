@@ -30,7 +30,6 @@ public class GifInfoDto {
         this.gifId = gif.getId();
         this.url = gif.getUrl();
         this.caption = gif.getCaption();
-
         this.email = gif.getWriter().getEmail();
 
 

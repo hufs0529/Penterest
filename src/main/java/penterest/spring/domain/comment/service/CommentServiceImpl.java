@@ -70,7 +70,7 @@ public class CommentServiceImpl implements  CommentService{
         Comment comment = commentRepository.findById(id).orElseThrow();
 
         if(!comment.getWriter().getEmail().equals(SecurityUtil.getLoginUserEmail())
-            || comment.getWriter().getAuthorities().equals("NORMAL")){
+            || comment.getWriter().getRole().equals("ADMIN")){
             throw new Exception();
         }
 
@@ -82,7 +82,7 @@ public class CommentServiceImpl implements  CommentService{
         Comment comment = commentRepository.findById(id).orElseThrow();
 
         if(!comment.getWriter().getEmail().equals(SecurityUtil.getLoginUserEmail())
-            || comment.getWriter().getAuthorities().equals("NORMAL")) {
+            || comment.getWriter().getRole().equals("ADMIN")) {
             throw new Exception();
         }
 

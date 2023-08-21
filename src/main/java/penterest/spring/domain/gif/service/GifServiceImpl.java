@@ -74,7 +74,7 @@ public class GifServiceImpl implements  GifService{
         Gif gif = gifRepository.findById(id).orElseThrow(()->
                 new Exception());
 
-        if (checkAuthority(gif) || gif.getWriter().getAuthorities().equals("NORMAL") ) {
+        if (checkAuthority(gif) || gif.getWriter().getRole().equals("NORMAL")) {
             gifRepository.delete(gif);
         }else {
             throw new Exception("인가된 유저가 아닙니다");
@@ -86,9 +86,7 @@ public class GifServiceImpl implements  GifService{
 
     @Override
     public GifInfoDto getGifInfo(Long id) throws Exception {
-
-        return new GifInfoDto(gifRepository.findWriterById(id)
-                .orElseThrow( ()-> new Exception()));
+        return new GifInfoDto(gifRepository.findGifById(id));
     }
 
 

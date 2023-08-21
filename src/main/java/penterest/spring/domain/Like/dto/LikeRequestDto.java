@@ -12,7 +12,6 @@ public class LikeRequestDto {
     private Long memberId;
     private Long gifId;
 
-
     public LikeRequestDto(Long memberId, Long gifId){
         this.memberId = memberId;
         this.gifId = gifId;

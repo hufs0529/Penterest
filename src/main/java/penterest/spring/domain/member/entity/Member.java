@@ -6,12 +6,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import penterest.spring.domain.comment.entity.Comment;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.global.domain.BaseTimeEntity;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static javax.persistence.EnumType.STRING;
 
 @Getter
 @Setter
@@ -30,12 +31,16 @@ public class Member extends BaseTimeEntity {
 
     private String password;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_authority",
-            joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "member_id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
-    private Set<Authority> authorities;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "user_authority",
+//            joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "member_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+//    private Set<Authority> authorities;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 30)
+    private Role role;
 
     @OneToMany(mappedBy = "writer")
     @JsonManagedReference
@@ -49,7 +54,6 @@ public class Member extends BaseTimeEntity {
     public Member(String email, String password, Set<Authority> authorities) {
         this.email = email;
         this.password = password;
-        this.authorities = (authorities != null) ? authorities : getDefaultAuthorities();
     }
 
     private Set<Authority> getDefaultAuthorities() {
@@ -64,7 +68,6 @@ public class Member extends BaseTimeEntity {
     }
 
     public void addComment(Comment comment) {
-
         commentList.add(comment);
     }
 
@@ -79,6 +82,10 @@ public class Member extends BaseTimeEntity {
 
     public boolean matchPassword(PasswordEncoder passwordEncoder, String checkPassword){
         return passwordEncoder.matches(checkPassword, getPassword());
+    }
+
+    public void addUserAuthority() {
+        this.role = Role.USER;
     }
 
 

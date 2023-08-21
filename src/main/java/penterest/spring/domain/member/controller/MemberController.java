@@ -11,6 +11,7 @@ import penterest.spring.domain.member.dto.MemberInfoDto;
 import penterest.spring.domain.member.dto.MemberWithdrawDto;
 import penterest.spring.domain.member.dto.UpdatePasswordDto;
 import penterest.spring.domain.member.entity.Member;
+import penterest.spring.domain.member.entity.Role;
 import penterest.spring.domain.member.service.MemberService;
 import penterest.spring.global.security.util.SecurityUtil;
 
@@ -27,16 +28,16 @@ public class MemberController {
 
     @PutMapping("/password")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity updatePassword(@Valid @RequestBody UpdatePasswordDto updatePasswordDto) throws Exception {
+    public String updatePassword(@Valid @RequestBody UpdatePasswordDto updatePasswordDto) throws Exception {
         memberService.updatePassword(updatePasswordDto.checkPassword(), updatePasswordDto.toBePassword(), SecurityUtil.getLoginUserEmail());
-        return new ResponseEntity(updatePasswordDto, HttpStatus.OK);
+        return "비밀번호가 변경되었습니다";
     }
 
     @DeleteMapping("/delete")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity withdraw(@Valid @RequestBody MemberWithdrawDto memberWithdrawDto) throws Exception {
+    public String withdraw(@Valid @RequestBody MemberWithdrawDto memberWithdrawDto) throws Exception {
         memberService.withdraw(memberWithdrawDto.checkPassword(), SecurityUtil.getLoginUserEmail());
-        return new ResponseEntity(memberWithdrawDto, HttpStatus.OK);
+        return "계정이 삭제되었습니다";
     }
 
     @GetMapping("/search/{id}")
@@ -55,5 +56,16 @@ public class MemberController {
     @GetMapping("/search/gif/{email}")
     public List<MemberGifDto> getGifInfoByEmail(@PathVariable String email) throws Exception {
         return memberService.getGifInfoByEmail(email);
+    }
+
+    @PutMapping("/role/update/{email}")
+    public ResponseEntity<Role> updateRole(@PathVariable String email) {
+        Role updatedRole = memberService.updateRole(email);
+
+        if (updatedRole == Role.ADMIN) {
+            return ResponseEntity.ok(updatedRole);
+        } else {
+            return ResponseEntity.ok(updatedRole);
+        }
     }
 }
