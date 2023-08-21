@@ -39,4 +39,6 @@ public interface GifService {
     List<LikedGifDto> getLikeGifListWithEmail(String email);
 
     GifPagingDto getGifList(Pageable pageable, GifSearchCondition gifSearchCondition);
+
+    //void saveGifAndCaption(GifSaveDto gifSaveDto);
 }

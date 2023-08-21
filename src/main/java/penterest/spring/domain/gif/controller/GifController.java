@@ -1,28 +1,32 @@
 package penterest.spring.domain.gif.controller;
 
-import co.elastic.clients.elasticsearch.nodes.Http;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import penterest.spring.domain.Like.dto.LikedGifDto;
 import penterest.spring.domain.comment.dto.CommentESDto;
+import penterest.spring.domain.gif.dto.GifData;
 import penterest.spring.domain.gif.dto.GifSaveDto;
 import penterest.spring.domain.gif.dto.GifSearchCondition;
 import penterest.spring.domain.gif.entity.Gif;
 import penterest.spring.domain.gif.entity.GifDocument;
-import penterest.spring.domain.gif.repository.GifSearchQueryRepository;
 import penterest.spring.domain.gif.service.GifService;
 import penterest.spring.domain.member.controller.MemberController;
 
 import javax.validation.Valid;
-import java.awt.print.Pageable;
+import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/gif")
@@ -30,11 +34,14 @@ import java.util.List;
 public class GifController {
 
     private final GifService gifService;
+
     private final Logger logger = LoggerFactory.getLogger(MemberController.class);
+    private final Logger logger2 = LoggerFactory.getLogger(GifController.class.getName());
 
     /**
      * 게시글 저장
      */
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/save")
     public ResponseEntity save(@Valid @RequestBody GifSaveDto gifSaveDto) throws Exception {
@@ -47,6 +54,65 @@ public class GifController {
             logger.warn("Validation failed: {}", ex.getMessage());
             throw ex;
         }
+    }
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @PostMapping("/save")
+//    public ResponseEntity save(@Valid @RequestBody Map<String, String> data) throws Exception {
+//        RestTemplate restTemplate = new RestTemplate();
+//        HttpHeaders header = new HttpHeaders();
+//        String flask_url = "http://localhost:5000/upload";
+//
+//        header.setContentType(MediaType.APPLICATION_JSON);
+//        header.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+//        //HttpEntity<Map<String, String>> entity = new HttpEntity<>(jsonData, header);
+//        HttpEntity<Map<String, String>> entity = new HttpEntity<>(data, header);
+//
+//        ResponseEntity<String> response = restTemplate.exchange(flask_url, HttpMethod.POST, entity, String.class);
+//        logger2.info(response.toString());
+//        logger2.info(String.valueOf(response.getStatusCode()));
+//
+//        if (response.getStatusCode() == HttpStatus.OK) {
+//            try {
+//                // JSON 파싱
+//                String responseBody = response.getBody();
+//                ObjectMapper objectMapper = new ObjectMapper();
+//                JsonNode jsonNode = objectMapper.readTree(responseBody);
+//
+//                String urlFromResponse = jsonNode.get("url").asText();
+//                String captionFromResponse = jsonNode.get("caption").asText();
+//
+//                logger2.info(urlFromResponse.toString());
+//                GifSaveDto gifSaveDto = new GifSaveDto(urlFromResponse, captionFromResponse);
+//
+//                Gif gif = gifService.save(gifSaveDto);
+//                return ResponseEntity
+//                        .status(HttpStatus.CREATED)
+//                        .body("Gif created with ID: " + gif.getId());
+//            }catch (MethodArgumentNotValidException ex){
+//                logger.warn("Validation failed: {}", ex.getMessage());
+//                throw ex;
+//            }
+//        }else {
+//            // Handle other response statuses here
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("Error occurred during communication with Flask");
+//        }
+//    }
+
+    @PostMapping("/save2")
+    public ResponseEntity<String> saveGif(@RequestBody Map<String, String> jsonData) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders header = new HttpHeaders();
+        String flask_url = "http://localhost:5000/upload";
+
+        header.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+        header.setAccept(Arrays.asList(new MediaType[] {MediaType.APPLICATION_JSON}));
+
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(jsonData, header);
+
+        ResponseEntity<String> response = restTemplate.exchange(flask_url, HttpMethod.POST, entity, String.class);
+        logger2.info(response.toString());
+        return response;
     }
 
 

@@ -3,10 +3,14 @@ package penterest.spring.domain.gif.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import penterest.spring.domain.Like.dto.LikedGifDto;
 import penterest.spring.domain.Like.repository.LikeRepository;
 import penterest.spring.domain.comment.dto.CommentESDto;
@@ -130,6 +134,23 @@ public class GifServiceImpl implements  GifService{
     public GifPagingDto getGifList(Pageable pageable, GifSearchCondition gifSearchCondition) {
         return new GifPagingDto(customGifRepository.search(gifSearchCondition, pageable));
     }
+
+//    @Override
+//    public void saveGifAndCaption(GifSaveDto gifSaveDto) {
+//        String gifUrl = gifSaveDto.url();
+//        String gifCaption = gifSaveDto.caption();
+//
+//        RestTemplate restTemplate = new RestTemplate();
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//
+//        String flaskUrl = "http://localhost:5000/upload";
+//
+//        HttpEntity<GifSaveDto> request = new HttpEntity<>(gifSaveDto, headers);
+//        restTemplate.postForEntity(flaskUrl, request, String.class);
+//
+//    }
 
 
     @Override

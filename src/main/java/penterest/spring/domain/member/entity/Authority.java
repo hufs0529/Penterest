@@ -2,10 +2,7 @@ package penterest.spring.domain.member.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "authority")
@@ -17,6 +14,17 @@ import javax.persistence.Table;
 public class Authority {
 
     @Id
-    @Column(name = "authority_name", length = 50)
-    private String authorityName;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "authority_name")
+    private Authority authority;
+
+    public Authority(String normal) {
+    }
 }

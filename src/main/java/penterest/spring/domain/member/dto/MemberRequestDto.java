@@ -19,17 +19,17 @@ public class MemberRequestDto {
     private String password;
     private String authorityName;
 
-    Authority authority = Authority.builder()
-            .authorityName("NORMAL")
-            .build();
+//    Authority authority = Authority.builder()
+//            .authorityName("NORMAL")
+//            .build();
 
-    public Member toMember(PasswordEncoder passwordEncoder) {
-        return Member.builder()
-                .email(email)
-                .password(passwordEncoder.encode(password))
-                .authorities(Set.of(authority))
-                .build();
-    }
+//    public Member toMember(PasswordEncoder passwordEncoder) {
+//        return Member.builder()
+//                .email(email)
+//                .password(passwordEncoder.encode(password))
+//                .authorities(Set.of(authority))
+//                .build();
+//    }
 
     public UsernamePasswordAuthenticationToken toAuthentication() {
         return new UsernamePasswordAuthenticationToken(email, password);

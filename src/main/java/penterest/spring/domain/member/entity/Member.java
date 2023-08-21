@@ -9,6 +9,7 @@ import penterest.spring.global.domain.BaseTimeEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -44,13 +45,17 @@ public class Member extends BaseTimeEntity {
     @JsonManagedReference
     private List<Gif> gifList = new ArrayList<>();
 
-
-
     @Builder
     public Member(String email, String password, Set<Authority> authorities) {
         this.email = email;
         this.password = password;
-        this.authorities = authorities;
+        this.authorities = (authorities != null) ? authorities : getDefaultAuthorities();
+    }
+
+    private Set<Authority> getDefaultAuthorities() {
+        Set<Authority> defaultAuthorities = new HashSet<>();
+        defaultAuthorities.add(new Authority("NORMAL"));
+        return defaultAuthorities;
     }
 
     public void addGif(Gif gif) {

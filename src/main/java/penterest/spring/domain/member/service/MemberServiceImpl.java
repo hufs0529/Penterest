@@ -34,12 +34,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void signUp(MemberSignUpDto memberRequestDto) throws ValidationException, DuplicateEmailException {
-        Member member = memberRequestDto.toEntity();
+    public void signUp(MemberSignUpDto memberSignUpDto) throws ValidationException, DuplicateEmailException {
+        Member member = memberSignUpDto.toEntity();
 
         member.encodePassword(passwordEncoder);
 
-        if (memberRepository.existsByEmail(memberRequestDto.getEmail())) {
+        if (memberRepository.existsByEmail(memberSignUpDto.getEmail())) {
             throw new DuplicateEmailException("Email already exists");
         }
         memberRepository.save(member);
