@@ -82,6 +82,23 @@ services:
       - elasticsearch
     restart: unless-stopped
 
+  index:
+    analysis:
+      analyzer:
+        my_custom_analyzer:
+          type: custom
+          tokenizer: my_custom_tokenizer
+          filter: [my_custom_filter]
+
+      tokenizer:
+        my_custom_tokenizer:
+          type: letter
+      filter:
+        my_custom_filter:
+          type: stop
+          stopwords: ["lowercase", "stop", "snowball]
+
+
   logstash-gif:
     build:
       context: logstash/
