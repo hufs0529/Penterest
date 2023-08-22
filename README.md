@@ -61,4 +61,18 @@ docker run penterest
 #### 5-2. 팔로우, 팔로잉 수
 
 
-# 
+# 🏇 Remarkable Points
+
+#### 1. Gif 업로드시 로그인된 사용자 email추출 후 게시자 저장
+```bash
+Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails) principal).getUsername();
+```
+#### 2. Member 삭제 등 Member본인 혹인 ADMIN계정시 삭제 권한 부여
+```bash
+if (checkAuthority(gif) || gif.getWriter().getRole().equals("NORMAL")) {
+            gifRepository.delete(gif);
+```
+#### 3. DTO 사용으로 Gif 조회시 Member의 email만 노출시켜서 개인정보 및 불필요한 정보 노출 방지
+
+#### 4. 
