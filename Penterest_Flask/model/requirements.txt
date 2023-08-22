@@ -1,0 +1,11 @@
+moviepy
+opencv-python==4.7.0.68
+huggingface_hub
+openai-clip
+transformers
+torch==1.13.1
+numpy==1.21.6
+flask
+flask_cors
+boto3
+torchvision==0.14.1

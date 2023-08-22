@@ -1,11 +1,10 @@
 import boto3
 import movie
 import AWSs3
-from flask import Flask, request, jsonify, send_file, render_template
-from werkzeug.utils import secure_filename
+from flask import Flask, request
 from moviepy.editor import *
 from flask_cors import CORS
-import convert, json
+import convert
 import requests 
 
 app = Flask(__name__)
@@ -28,22 +27,6 @@ def upload_file():
       "caption":caption_txt
     }
     return data
-    # data = {
-    #   "url": "www.GOOGLE.com",
-    #   "caption": "hello"
-    # }
-
-
-    # spring_url = "http://localhost:8080/gif/save"
-    # headers = {'Content-Type': 'application/json'}
-
-    # response = requests.post(spring_url, json=data, headers=headers)
-    # print(json.dumps(data))
-    # if response.status_code == 201 or 200:
-    #   spring_data = response.json()
-    #   return jsonify(spring_data)
-    # else:
-    #   return response.status_code
 
 
 if __name__ == '__main__':
