@@ -33,29 +33,29 @@
 <img width="590" alt="flask아키" src="https://github.com/hufs0529/penterest/assets/81501114/4c7ab6fb-3d91-4e29-83a3-4be322c59ea2">
 
 
-
-
 # 🤸 Quickstart
 
-Java 17, MySQL is required:
+Python  is required:
 
-#### 1. Docker로 시작하기
+#### 1. 서버에 CLIP모델 직접 사용하기 
 ```bash
-docker build -t penterest .
-docker run penterest
+penterest/Penterest_Flask/model/Dockerfile
+```
+#### 2. CLIP API 사용하기
+```bash
+penterest/Penterest_Flask/api/Dockerfile
 ```
 
-# 🖼️ About Main Services
-
-### 1. JWT Token 기반 로그인
-### 2. 동영상 업로드 및 Gif 전환
-### 3.검색엔진
-#### 3-1. 전환된 Gif의 Caption 기반 ElasticSearch 검색엔진
-#### 3-2. 전환된 Gif의 Comment 기반 ElasticSearch 검색엔진
-#### 3-3. TypedQuery를 이용한 Gif 조회
-### 4. 게시글 좋아요
-#### 4-1. 좋아요한 게시글 조
-### 5. Member 팔로우
-#### 5-1. 팔로우, 팔로잉 관계
-#### 5-2. 팔로우, 팔로잉 수
-
+# 🖼️ About Model
+<div>
+  <img src="https://github.com/hufs0529/penterest/assets/81501114/b736a7f4-43ca-47cb-ba82-14aea7a6f897" width="10%" height="10%" title="px(픽셀) 크기 설정" alt="RubberDuck"></img>
+https://github.com/rmokady/CLIP_prefix_caption
+</div>
+</br>
+</br>
+OpenAI-CLIP 모델을 사용한 'CLIP_prefix_caption' 사용
+</br>
+</br>
+<div>
+<img width="180" alt="화면 캡처 2023-08-22 121932" src="https://github.com/hufs0529/penterest/assets/81501114/0cd9a49c-825d-40a9-aa1b-6e1049357718">
+</div>
