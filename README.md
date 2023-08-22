@@ -38,13 +38,26 @@
 
 # 🤸 Quickstart
 
-Java 17, MySQL is required:
+Java 17, MySQL is required
 
 #### 1. Docker로 시작하기
 ```bash
 docker build -t penterest .
 docker run penterest
 ```
+
+# 🤸 Readme & branches
+### branches
+    Gif변환 및 AI서버:https://github.com/hufs0529/penterest/tree/flask
+    ELK: https://github.com/hufs0529/penterest/tree/elk
+
+### Readme
+    Member: https://github.com/hufs0529/penterest/blob/main/review/Member.md
+    Gif: https://github.com/hufs0529/penterest/blob/main/review/Gif.md
+    ElasticQuery: https://github.com/hufs0529/penterest/blob/main/review/ElasticQuery.md
+    Comment: https://github.com/hufs0529/penterest/blob/main/review/Comment.md
+    Like: https://github.com/hufs0529/penterest/blob/main/review/Like.md
+    Follow: https://github.com/hufs0529/penterest/blob/main/review/Follow.md
 
 # 🖼️ About Main Services
 
