@@ -133,24 +133,6 @@ public class GifServiceImpl implements  GifService{
         return new GifPagingDto(customGifRepository.search(gifSearchCondition, pageable));
     }
 
-//    @Override
-//    public void saveGifAndCaption(GifSaveDto gifSaveDto) {
-//        String gifUrl = gifSaveDto.url();
-//        String gifCaption = gifSaveDto.caption();
-//
-//        RestTemplate restTemplate = new RestTemplate();
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//
-//        String flaskUrl = "http://localhost:5000/upload";
-//
-//        HttpEntity<GifSaveDto> request = new HttpEntity<>(gifSaveDto, headers);
-//        restTemplate.postForEntity(flaskUrl, request, String.class);
-//
-//    }
-
-
     @Override
     public void migrateGifInfoDtosToElasticsearch() {
         List<Gif> gifs = gifRepository.findAll();

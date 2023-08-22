@@ -55,6 +55,9 @@ public class GifController {
             throw ex;
         }
     }
+
+    // RestTemplate 나중에 구현해보자
+
 //    @ResponseStatus(HttpStatus.CREATED)
 //    @PostMapping("/save")
 //    public ResponseEntity save(@Valid @RequestBody Map<String, String> data) throws Exception {
@@ -98,22 +101,6 @@ public class GifController {
 //                    .body("Error occurred during communication with Flask");
 //        }
 //    }
-
-    @PostMapping("/save2")
-    public ResponseEntity<String> saveGif(@RequestBody Map<String, String> jsonData) {
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders header = new HttpHeaders();
-        String flask_url = "http://localhost:5000/upload";
-
-        header.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
-        header.setAccept(Arrays.asList(new MediaType[] {MediaType.APPLICATION_JSON}));
-
-        HttpEntity<Map<String, String>> entity = new HttpEntity<>(jsonData, header);
-
-        ResponseEntity<String> response = restTemplate.exchange(flask_url, HttpMethod.POST, entity, String.class);
-        logger2.info(response.toString());
-        return response;
-    }
 
 
     /**
@@ -162,11 +149,11 @@ public class GifController {
         return ResponseEntity.ok(gifList);
     }
 
-//    @PostMapping("/migrate")
-//    public ResponseEntity<String> migrateGifInfoDtosToElasticsearch() {
-//        gifService.migrateGifInfoDtosToElasticsearch();
-//        return ResponseEntity.ok("Migration completed.");
-//    }
+    @PostMapping("/migrate")
+    public ResponseEntity<String> migrateGifInfoDtosToElasticsearch() {
+        gifService.migrateGifInfoDtosToElasticsearch();
+        return ResponseEntity.ok("Migration completed.");
+    }
 
     // email 입력시 email이 작성한 gif list반환
     @GetMapping("/gifListByWriter/{email}")
