@@ -49,6 +49,12 @@
     <img src="docs/book/.gitbook/assets/stack.gif">
 </div>
 
+# 🔋 Architecture
+<img width="590" alt="flask아키" src="https://github.com/hufs0529/penterest/assets/81501114/4c7ab6fb-3d91-4e29-83a3-4be322c59ea2">
+
+
+
+
 # 🤸 Quickstart
 
 Python 3.7 is required:
@@ -69,10 +75,12 @@ https://github.com/rmokady/CLIP_prefix_caption
 </div>
 </br>
 </br>
-</br>
 OpenAI-CLIP 모델을 사용한 'CLIP_prefix_caption' 사용
 </br>
 </br>
 <div>
 <img width="180" alt="화면 캡처 2023-08-22 121932" src="https://github.com/hufs0529/penterest/assets/81501114/0cd9a49c-825d-40a9-aa1b-6e1049357718">
 </div>
+
+
+# 
