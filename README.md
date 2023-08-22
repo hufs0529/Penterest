@@ -11,17 +11,22 @@
 
 <h3 align="center">Penterest</h3>
 
-  <p align="center">
+  <h2 align="center">
     비디오 Gif전환 및 Gif 검색 서비스
     <br />
-  </p>
+    <br />
+    <br />
+  </h2>
+  <h3>Role: Spring API, Flask 모델 적재, S3, ELK, React(X)</h3>
+    
+  
 </div>
 
 
 
 <br />
-# 🤖 Introduction
-https://youtu.be/5-_bcY2WcaE
+
+### 🙌  시연 영상: https://youtu.be/5-_bcY2WcaE
 
 # 🤖 Introduction
 
@@ -38,7 +43,7 @@ https://youtu.be/5-_bcY2WcaE
 <img width="527" alt="화면 캡처 2023-08-22 133146" src="https://github.com/hufs0529/penterest/assets/81501114/69c15b7a-bd3c-4ab1-ba24-172e7cecb030">
 
 
-# 🤸 Quickstart
+# 🗺 Quickstart
 
 Java 17, MySQL is required
 
