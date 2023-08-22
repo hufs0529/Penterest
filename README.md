@@ -88,4 +88,24 @@ if (checkAuthority(gif) || gif.getWriter().getRole().equals("NORMAL")) {
 ```
 #### 3. DTO 사용으로 Gif 조회시 Member의 email만 노출시켜서 개인정보 및 불필요한 정보 노출 방지
 
-#### 4. 
+#### 4. 댓글 삭제시 대댓글 자동 삭제
+```bash
+public List<Comment> findRemovableList() {
+        List<Comment> result = new ArrayList<>();
+        Optional.ofNullable(this.parent).ifPresentOrElse(
+                parentComment -> {
+                    if(parentComment.isRemoved() && parentComment.isAllChildRemoved()) {
+                        result.addAll((parentComment.getChildList()));
+                        result.add(parentComment);
+                    }
+                },
+                () -> {
+                    if (isAllChildRemoved()) {
+                        result.add(this);
+                        result.addAll(this.getChildList());
+                    }
+                }
+        );
+        return result;
+    }
+```
