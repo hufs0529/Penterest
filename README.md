@@ -20,6 +20,8 @@
 
 
 <br />
+# 🤖 Introduction
+https://youtu.be/5-_bcY2WcaE
 
 # 🤖 Introduction
 
@@ -48,16 +50,17 @@ docker run penterest
 
 # 🤸 Readme & branches
 ### branches
-    Gif변환 및 AI서버:https://github.com/hufs0529/penterest/tree/flask
-    ELK: https://github.com/hufs0529/penterest/tree/elk
+- [Gif변환 및 AI서버](https://github.com/hufs0529/penterest/tree/flask)
+- [ELK](https://github.com/hufs0529/penterest/tree/elk)
 
 ### Readme
-    Member: https://github.com/hufs0529/penterest/blob/main/review/Member.md
-    Gif: https://github.com/hufs0529/penterest/blob/main/review/Gif.md
-    ElasticQuery: https://github.com/hufs0529/penterest/blob/main/review/ElasticQuery.md
-    Comment: https://github.com/hufs0529/penterest/blob/main/review/Comment.md
-    Like: https://github.com/hufs0529/penterest/blob/main/review/Like.md
-    Follow: https://github.com/hufs0529/penterest/blob/main/review/Follow.md
+- [Member](https://github.com/hufs0529/penterest/blob/main/review/Member.md)
+- [Gif](https://github.com/hufs0529/penterest/blob/main/review/Gif.md)
+- [ElasticQuery](https://github.com/hufs0529/penterest/blob/main/review/ElasticQuery.md)
+- [Comment](https://github.com/hufs0529/penterest/blob/main/review/Comment.md)
+- [Like](https://github.com/hufs0529/penterest/blob/main/review/Like.md)
+- [Follow](https://github.com/hufs0529/penterest/blob/main/review/Follow.md)
+
 
 # 🖼️ About Main Services
 
@@ -109,3 +112,31 @@ public List<Comment> findRemovableList() {
         return result;
     }
 ```
+# 🏇 UI & 시스템 로직
+
+### 기본 UI
+- 상단에 검색엔진
+- 하단에 검색된 결과 이미지
+      ![검색된 이미지](https://github.com/hufs0529/penterest/assets/81501114/8320c54c-e5bf-493f-aac4-9935cb3d2f0b)
+- 업로드 모달창에서 변환될 GIF의 재생속도, 구간 지정 가능
+    ![업로드 모달 (1)](https://github.com/hufs0529/penterest/assets/81501114/bfe12fbc-fe32-47ee-b7a9-7a3d6cc6166c)
+
+### Data Flow
+1. Flask 서버에서 GIF 변환 및 S3 스토리지 저장
+2. 변환된 GIF를 OpenAI-CLIP 모델로 이미지에 대한 설명 생성
+   ##### 2-1. Flask → React로 S3에 저장된 GIF의 url과 이미지에 대한 설명이 response형태로 반환된다
+     <img width="474" alt="화면 캡처 2023-08-22 121932" src="https://github.com/hufs0529/penterest/assets/81501114/35fca35f-54f2-4644-9f26-4ef4c947d828">
+3. Spring 서버로 데이터 전송 및 MySQL 적재
+     ![GCP MYSQL](https://github.com/hufs0529/penterest/assets/81501114/07c1b162-8c2b-4de1-ae12-642be3185b00)
+4. Logstash를 활용한 MySQL -> ElasticSearch 적재
+     ##### 4-1. 검색을 위한 Tokenizer, Filter적용
+5. React Web UI에서 검색엔진 구현
+   <p align="center">
+   <h5>sitting</h5>
+  <img src="https://github.com/hufs0529/penterest/assets/81501114/4500e255-f4ae-49a3-8434-8f2d7f3c967c" alt="sitting PNG" width="300" />
+  <h5>sits</h5>
+  <img src="https://github.com/hufs0529/penterest/assets/81501114/8dc7ac39-3e2c-4b6a-86b3-5872ca09d0c9" alt="sit PNG" width="300" />
+  <h5>sit</h5>
+  <img src="https://github.com/hufs0529/penterest/assets/81501114/0fb88231-7bf9-406d-8cec-6d7228c874a7" alt="sits PNG (1)" width="300" />
+</p>
+
