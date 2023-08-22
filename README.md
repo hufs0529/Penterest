@@ -9,10 +9,10 @@
     <img alt="s3" src="https://github.com/hufs0529/penterest/assets/81501114/9bdbe708-6664-4a31-897f-921fd73e542f" alt="Logo" width="150" height="100">
   </a>
 
-<h3 align="center">Video to Gif Converter & Save in S3</h3>
+<h3 align="center">Penterest</h3>
 
   <p align="center">
-    Video -> Gif 변환 및 S3 적재 API
+    비디오 Gif전환 및 Gif 검색 서비스
     <br />
   </p>
 </div>
@@ -23,47 +23,56 @@
 
 # 🤖 Introduction
 
-🤹 Penterest 서비스의 Gif 검색 기능을 위해서 동영상 업로드시 Gif변환 및 OpenAI-CLIP 모델을 사용한 Caption 생성
--  flask 서버를 통한 동영상 업로드
--  OpenAI-CLIP을 통한 Caption 생성 -> S3에 Gif적재
--  Spring 서버 적재를 위한 S3 Url과 Caption 반환
+🤹 Gif 생성 및 검색엔진
+-  MoviePy를 활용한 동영상 Gif전환
+-  OpenAI-CLIP모델을 활용한 Gif에 대한 설명 생성
+-  ElasticSearch를 활용한 생성된 설명과 댓글에 대한 검색엔진
 
 <div align="center">
     <img src="docs/book/.gitbook/assets/stack.gif">
 </div>
 
 # 🔋 Architecture
-<img width="590" alt="flask아키" src="https://github.com/hufs0529/penterest/assets/81501114/4c7ab6fb-3d91-4e29-83a3-4be322c59ea2">
-
-
+<img width="527" alt="화면 캡처 2023-08-22 133146" src="https://github.com/hufs0529/penterest/assets/81501114/69c15b7a-bd3c-4ab1-ba24-172e7cecb030">
 
 
 # 🤸 Quickstart
 
-Python 3.7 is required:
+Java 17, MySQL is required:
 
-#### 1. 서버에 CLIP모델 직접 사용하기 
+#### 1. Docker로 시작하기
 ```bash
-penterest/Penterest_Flask/model/Dockerfile
-```
-#### 2. CLIP API 사용하기
-```bash
-penterest/Penterest_Flask/api/Dockerfile
+docker build -t penterest .
+docker run penterest
 ```
 
-# 🖼️ About Model
-<div>
-  <img src="https://github.com/hufs0529/penterest/assets/81501114/b736a7f4-43ca-47cb-ba82-14aea7a6f897" width="10%" height="10%" title="px(픽셀) 크기 설정" alt="RubberDuck"></img>
-https://github.com/rmokady/CLIP_prefix_caption
-</div>
-</br>
-</br>
-OpenAI-CLIP 모델을 사용한 'CLIP_prefix_caption' 사용
-</br>
-</br>
-<div>
-<img width="180" alt="화면 캡처 2023-08-22 121932" src="https://github.com/hufs0529/penterest/assets/81501114/0cd9a49c-825d-40a9-aa1b-6e1049357718">
-</div>
+# 🖼️ About Main Services
+
+### 1. JWT Token 기반 로그인
+### 2. 동영상 업로드 및 Gif 전환
+### 3.검색엔진
+#### 3-1. 전환된 Gif의 Caption 기반 ElasticSearch 검색엔진
+#### 3-2. 전환된 Gif의 Comment 기반 ElasticSearch 검색엔진
+#### 3-3. TypedQuery를 이용한 Gif 조회
+### 4. 게시글 좋아요
+#### 4-1. 좋아요한 게시글 조
+### 5. Member 팔로우
+#### 5-1. 팔로우, 팔로잉 관계
+#### 5-2. 팔로우, 팔로잉 수
 
 
-# 
+# 🏇 Remarkable Points
+
+#### 1. Gif 업로드시 로그인된 사용자 email추출 후 게시자 저장
+```bash
+Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails) principal).getUsername();
+```
+#### 2. Member 삭제 등 Member본인 혹인 ADMIN계정시 삭제 권한 부여
+```bash
+if (checkAuthority(gif) || gif.getWriter().getRole().equals("NORMAL")) {
+            gifRepository.delete(gif);
+```
+#### 3. DTO 사용으로 Gif 조회시 Member의 email만 노출시켜서 개인정보 및 불필요한 정보 노출 방지
+
+#### 4. 

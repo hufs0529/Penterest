@@ -74,7 +74,7 @@ public class GifServiceImpl implements  GifService{
         Gif gif = gifRepository.findById(id).orElseThrow(()->
                 new Exception());
 
-        if (checkAuthority(gif) || gif.getWriter().getRole().equals("NORMAL")) {
+        if (checkAuthority(gif) || gif.getWriter().getRole().equals("ADMIN")) {
             gifRepository.delete(gif);
         }else {
             throw new Exception("인가된 유저가 아닙니다");
