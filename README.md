@@ -28,6 +28,10 @@
 
 ### 🙌  시연 영상: https://youtu.be/5-_bcY2WcaE
 
+# 🤖 ERD
+  <img width="556" alt="erd" src="https://github.com/hufs0529/penterest/assets/81501114/a2c1d8cc-0b22-44c3-9581-8c2101af9e41">
+
+
 # 🤖 Introduction
 
 🤹 Gif 생성 및 검색엔진
