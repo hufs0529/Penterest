@@ -29,7 +29,7 @@
 ### 🙌  시연 영상: https://youtu.be/5-_bcY2WcaE
 
 # 🤖 ERD
-  <img width="556" alt="erd" src="https://github.com/hufs0529/penterest/assets/81501114/a2c1d8cc-0b22-44c3-9581-8c2101af9e41">
+  <img width="556" alt="erd" src="https://github.com/hufs0529/penterest/assets/81501114/be7e7d06-711a-406b-8112-ef85f7f04ca4">
 
 
 # 🤖 Introduction
@@ -48,14 +48,21 @@
 
 
 # 🗺 Quickstart
+#### 1. 이 브랜치에서는 Java 17, MySQL is required
 
-Java 17, MySQL is required
+#### 2. jar 파일 실행을 위해서 elasticsearch 서버가 필요합니다
+[ELK 브랜치](https://github.com/hufs0529/penterest/tree/elk)
 
-#### 1. Docker로 시작하기
+#### 3. Docker로 Spring 서버 시작하기
 ```bash
 docker build -t penterest .
 docker run penterest
 ```
+
+#### 4. Gif 생성 및 AI를 위한 서버
+[flask 브랜치](https://github.com/hufs0529/penterest/tree/flask)
+
+
 
 # 🤸 Readme & branches
 ### branches
