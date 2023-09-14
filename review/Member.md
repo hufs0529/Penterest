@@ -27,7 +27,7 @@
 
 ### MemberService
 
-```회원정보``` 가 일치한다면 Token 반환
+```회원정보``` 가 일치한다면 JWT Token 반환
 - 비밀번호가 다를경우 ```UserException``` 발생
 
 <br>
