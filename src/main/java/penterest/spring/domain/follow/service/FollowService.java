@@ -87,56 +87,5 @@ public class FollowService {
         return (long) response.size();
     }
 
-
-//    public List<String> getFollowingList(String email) throws Exception {
-//        List<Member> followingList = (List<Member>) memberRepository.findAllByEmail(email);
-//
-//        // Check if the list is not empty and return an appropriate response
-//        if (followingList.isEmpty()) {
-//            throw new Exception("없음");
-//        } else {
-//            List<String> emailList = followingList.stream().map(Member::getEmail).collect(Collectors.toList());
-//            return emailList;
-//        }
-//    }
-//
-//    public List<String> getFollowerList(String email) throws Exception {
-//        List<Member> followerList = (List<Member>) memberRepository.findAllByEmail(email);
-//
-//        // Check if the list is not empty and return an appropriate response
-//        if (followerList.isEmpty()) {
-//            throw new Exception("없음");
-//        } else {
-//            List<String> emailList = followerList.stream().map(Member::getEmail).collect(Collectors.toList());
-//            return emailList;
-//        }
-//    }
-
-//    public Long getFollowingCount(String email) {
-//        Member member = memberRepository.findByEmail(email);
-//
-//        return followRepository.countByToAccount(member.getId());
-//    }
-//
-//    public Long getFollowerCount(String email) {
-//        Member member = memberRepository.findByEmail(email);
-//
-//        return followRepository.countByFromAccount(member.getId());
-//    }
-
-//    public boolean ifFollowingExist(Long id){
-//        if(followRepository.findAllByToMember(id) != null){
-//            return true;
-//        }else{
-//            return false;
-//        }
-//    }
-//
-//    public boolean ifFollowerExist(Long id) {
-//        if(followRepository.findAllByFromMember(id) != null){
-//            return true;
-//        }else{
-//            return false;
-//        }
 }
 
