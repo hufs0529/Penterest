@@ -84,8 +84,108 @@ docker run penterest
 ### 2. 동영상 업로드 및 Gif 전환
 ### 3.검색엔진
 #### 3-1. 전환된 Gif의 Caption 기반 ElasticSearch 검색엔진
+
+<details>
+<summary>Caption 검색 쿼리 설정</summary>
+<div markdown="1">
+
+```bash
+public List<GifDocument> findByMatchesCaption(String caption) {  // GifSearchQueryRepository
+        Criteria criteria = Criteria.where("caption").matches(caption);
+        Query query = new CriteriaQuery(criteria);
+        SearchHits<GifDocument> searchHits = operations.search(query, GifDocument.class);
+        return searchHits.stream()
+                .map(SearchHit::getContent)
+                .collect(Collectors.toList());
+    }
+```
+
+</div>
+</details>
+
 #### 3-2. 전환된 Gif의 Comment 기반 ElasticSearch 검색엔진
-#### 3-3. TypedQuery를 이용한 Gif 조회
+
+<details>
+<summary>Comment 기 검색 쿼리 설정</summary>
+<div markdown="1">
+
+```bash
+public List<CommentESDto> searchCommentsByContent(String content) {  // GifSearchRepository
+        Criteria criteria = Criteria.where("content").matches(content);
+        Query query = new CriteriaQuery(criteria);
+        SearchHits<CommentDocument> searchHits = operations.search(query, CommentDocument.class);
+
+        return searchHits.stream()
+                .map(hit -> {
+                    CommentDocument commentDocument = hit.getContent();
+                    Long gifId = commentDocument.getGif_id();
+                    Gif gif = null;
+                    if (gifId != null) {
+                        gif = gifRepository.findGifById(gifId);
+                    }
+                    return CommentESDto.fromCommentDocument(commentDocument, gif);
+                })
+                .collect(Collectors.toList());
+    }
+```
+
+</div>
+</details>
+
+#### 3-3. jpql를 이용한 Gif 조회
+<details>
+<summary>jpql</summary>
+<div markdown="1">
+
+```bash
+public Page<Gif> search(GifSearchCondition gifSearchCondition, Pageable pageable) { // CustomGifRepository
+        String jpql = "select g from Gif g where 1=1";
+        if (gifSearchCondition.getCaption() != null) {
+            jpql += " and g.caption like :caption";
+        }
+
+        // Create query
+        TypedQuery<Gif> query = em.createQuery(jpql, Gif.class);
+
+        // Set parameters
+        if (gifSearchCondition.getCaption() != null) {
+            query.setParameter("caption", "%" + gifSearchCondition.getCaption() + "%");
+        }
+
+        // Pagination
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
+
+        // Fetch results and total count
+        List<Gif> content = query.getResultList();
+        long total = getTotalCount(gifSearchCondition);
+
+        return new PageImpl<>(content, pageable, total);
+    }
+```
+
+</div>
+</details>
+<details>
+<summary>pageable을 통한 검색 조건 설정</summary>
+<div markdown="1">
+  
+```bash
+@ResponseStatus(HttpStatus.OK)   // GifController
+    @GetMapping("/search")
+    public ResponseEntity search(
+            @RequestParam(value = "sort", defaultValue = "createDate") String sort,
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "5") Integer size,
+            @ModelAttribute GifSearchCondition gifSearchCondition) {
+        PageRequest pageable = PageRequest.of(page - 1, size, Sort.by(sort).ascending());
+        return ResponseEntity.ok(gifService.getGifList(pageable, gifSearchCondition));
+    }
+```
+
+</div>
+</details>
+
 ### 4. 게시글 좋아요
 #### 4-1. 좋아요한 게시글 조
 ### 5. Member 팔로우
