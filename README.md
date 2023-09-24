@@ -88,12 +88,12 @@ docker run penterest
 <div markdown="1">
 
 ```bash
-@Override  // GifServiceImpl
-    public Gif save(GifSaveDto gifSaveDto) {
+@Override
+    public Gif save(GifSaveDto gifSaveDto) { //GifServiceImpl
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email = ((UserDetails) principal).getUsername(); // 유저 정보
+        String email = ((UserDetails) principal).getUsername(); // 유저 정보 불러오기
 
-        Gif gif = gifSaveDto.toEntity(); // gifSaveDto의 caption은 flask 브랜치의 f.py 로부터 생성된다.
+        Gif gif = gifSaveDto.toEntity(); // gifSaveDto의 caption은 flask브랜치로부터 생성이 된다
         Member member = memberRepository.findByEmail(email);
         gif.confirmWriter(memberRepository, member);
 
@@ -102,8 +102,11 @@ docker run penterest
     }
 ```
 
+</div>
+</details>
+
 <details>
-<summary>Gif의 Caption 생성(flask 브랜치)</summary>
+<summary>Gif의 caption 생성</summary>
 <div markdown="1">
 
 ```bash
@@ -126,6 +129,8 @@ def upload_file():
 
 </div>
 </details>
+
+
 
 ### 3.검색엔진
 #### 3-1. 전환된 Gif의 Caption 기반 ElasticSearch 검색엔진
