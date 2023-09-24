@@ -82,6 +82,51 @@ docker run penterest
 
 ### 1. JWT Token 기반 로그인
 ### 2. 동영상 업로드 및 Gif 전환
+
+<details>
+<summary>Gif 생성</summary>
+<div markdown="1">
+
+```bash
+@Override  // GifServiceImpl
+    public Gif save(GifSaveDto gifSaveDto) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((UserDetails) principal).getUsername(); // 유저 정보
+
+        Gif gif = gifSaveDto.toEntity(); // gifSaveDto의 caption은 flask 브랜치의 f.py 로부터 생성된다.
+        Member member = memberRepository.findByEmail(email);
+        gif.confirmWriter(memberRepository, member);
+
+        gifRepository.save(gif);
+        return gif;
+    }
+```
+
+<details>
+<summary>Gif의 Caption 생성(flask 브랜치)</summary>
+<div markdown="1">
+
+```bash
+@app.route("/upload", methods=['GET', 'POST'])
+def upload_file():
+  if request.method == 'POST':
+    file = request.files['file']
+    title = file.filename
+    AWSs3.s3_put_video(s3, 'penterest', file, title)
+    movie.make(title, 0, 5, 1,4)
+    caption_txt = caption.inference(title, "COCO")
+    print(caption_txt)
+    
+    data = {
+      "url":AWSs3.s3_get_gif_url(title.replace("mp4","gif")),
+      "caption":caption_txt
+    }
+    return data
+```
+
+</div>
+</details>
+
 ### 3.검색엔진
 #### 3-1. 전환된 Gif의 Caption 기반 ElasticSearch 검색엔진
 
@@ -187,10 +232,158 @@ public Page<Gif> search(GifSearchCondition gifSearchCondition, Pageable pageable
 </details>
 
 ### 4. 게시글 좋아요
-#### 4-1. 좋아요한 게시글 조
+#### 4-1. 좋아요한 게시글 조회
+
+<details>
+<summary>GifRepository에 쿼리 생성 </summary>
+<div markdown="1">
+
+```bash
+@Query("SELECT NEW penterest.spring.domain.Like.dto.LikedGifDto(g.id, g.caption, g.url) " +    // GifRepository
+            "FROM Like l " +
+            "JOIN l.gif g " +
+            "JOIN l.member m " +
+            "WHERE m.email = :email")
+    List<LikedGifDto> findLikedGifDetailsByEmail(@Param("email") String email);
+```
+
+</div>
+</details>
+
+<details>
+<summary>GifRepository에 쿼리 생성 </summary>
+<div markdown="1">
+
+```bash
+@Query("SELECT NEW penterest.spring.domain.Like.dto.LikedGifDto(g.id, g.caption, g.url) " +    // GifRepository
+            "FROM Like l " +
+            "JOIN l.gif g " +
+            "JOIN l.member m " +
+            "WHERE m.email = :email")
+    List<LikedGifDto> findLikedGifDetailsByEmail(@Param("email") String email);
+```
+
+</div>
+</details>
+
+<details>
+<summary>email조회로 좋아요 한 게시글 불러오 </summary>
+<div markdown="1">
+
+```bash
+@Override   // GifServiceImpl
+    @Transactional(readOnly = true)
+    public List<LikedGifDto> getLikeGifListWithEmail(String email) {
+        List<LikedGifDto> likedGifDTOList = gifRepository.findLikedGifDetailsByEmail(email);
+        return likedGifDTOList;
+    }
+```
+
+</div>
+</details>
+
+
+
 ### 5. Member 팔로우
 #### 5-1. 팔로우, 팔로잉 관계
-#### 5-2. 팔로우, 팔로잉 수
+
+<details>
+<summary>팔로우, 언팔로우 하기</summary>
+<div markdown="1">
+
+```bash
+public String addFollow(String toAccount, String fromAccount) throws Exception { // FollowService
+        if(Objects.equals(toAccount, fromAccount)) {
+            throw new Exception();
+        }
+
+        Member toMember = memberRepository.findByEmail(toAccount);
+
+        Member fromMember = memberRepository.findByEmail(fromAccount);
+
+        Optional<Follow> relation = getFollowRelation(toMember.getEmail(), fromMember.getEmail());
+        if(relation.isPresent()) {
+            throw new Exception("Already exists");
+        }
+        followRepository.save(new Follow(toMember.getEmail(), fromMember.getEmail()));
+
+        return fromAccount + " 가 " + toAccount + "를 팔로우하기 시작했습니다";
+    }
+
+    public String unFollow(String toAccount, String fromAccount) throws Exception {
+        if(Objects.equals(toAccount, fromAccount)) {
+            throw new Exception();
+        }
+        Member toMember = memberRepository.findByEmail(toAccount);
+
+        Member fromMember = memberRepository.findByEmail(fromAccount);
+
+        Optional<Follow> relation = getFollowRelation(toMember.getEmail(), fromMember.getEmail());
+        if(relation.isEmpty()) {
+            throw new Exception("No exists");
+        }
+        followRepository.delete(relation.get());
+
+        return fromAccount + " 가 " + toAccount + "를 팔로우를 취소했습니다";
+    }
+    private Optional<Follow> getFollowRelation(String toAccount, String fromAccount) {
+        return followRepository.findByToMemberAndFromMember(toAccount, fromAccount);
+    }
+```
+
+</div>
+</details>
+
+
+#### 5-2. 팔로우, 팔로잉
+
+<details>
+<summary>팔로잉, 팔로워 멤버 리스트 확인</summary>
+<div markdown="1">
+
+```bash
+public List<Follow> findFollowingMembers(String email) {// FollowService
+        List<Follow> following = new ArrayList<>();
+        Member member = memberRepository.findByEmail(email);
+        if (member != null) {
+            following = followRepository.findByFromMember(member.getEmail());
+        }
+        return following;
+    }
+
+
+    public List<Follow> findFollowerMembers(String email) {
+        List<Follow> following = new ArrayList<>();
+        Member member = memberRepository.findByEmail(email);
+        if (member != null) {
+            following = followRepository.findByToMember(member.getEmail());
+        }
+
+        return following;
+    }
+```
+
+</div>
+</details>
+
+<details>
+<summary>팔로잉, 팔로워 수 확인</summary>
+<div markdown="1">
+
+```bash
+public Long getFollowingCount(String email) {
+        List<Follow> response = findFollowerMembers(email);
+        return (long) response.size();
+    }
+
+    public Long getFollowerCount(String email) {
+        List<Follow> response = findFollowerMembers(email);
+        return (long) response.size();
+    }
+```
+
+</div>
+</details>
 
 
 # 🏇 Remarkable Points
