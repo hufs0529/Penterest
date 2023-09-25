@@ -96,7 +96,7 @@ services:
       filter:
         my_custom_filter:
           type: stop
-          stopwords: ["lowercase", "stop", "snowball]
+          stopwords: ["lowercase", "stop", "snowball"]
 
 
   logstash-gif:
