@@ -46,6 +46,13 @@
 # 🔋 Architecture
 <img width="527" alt="화면 캡처 2023-08-22 133146" src="https://github.com/hufs0529/penterest/assets/81501114/69c15b7a-bd3c-4ab1-ba24-172e7cecb030">
 
+# 🏇 API 명세서
+[Member](https://documenter.getpostman.com/view/25143450/2s9YJW66aG)
+[Gif](https://documenter.getpostman.com/view/25143450/2s9YJW66aC)
+[Like](https://documenter.getpostman.com/view/25143450/2s9YJW66aD)
+[Follow](https://documenter.getpostman.com/view/25143450/2s9YJW66aC)
+[Comment](https://documenter.getpostman.com/view/25143450/2s9YJW66Vu)
+
 
 # 🗺 Quickstart
 #### 1. 이 브랜치에서는 Java 17, MySQL is required
